@@ -88,10 +88,9 @@ function getPlaylists(pageToken, playlists, callback) {
     url += "&pageToken=" + pageToken
   }
 
-  let options = { 
-    // credentials: 'include', 
-    headers: {  
-      "Authorization": "Bearer " + accessToken 
+  let options = {
+    headers: {
+      "Authorization": "Bearer " + accessToken
     }
   }
 
