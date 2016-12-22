@@ -65,6 +65,61 @@ document.getElementById("logout-button").onclick = function(event) {
   })
 }
 
+document.getElementById("get-playlists-button").onclick = function(event) {
+  let playlists = []
+  getPlaylists(null, playlists, function(error) {
+    if (error) {
+      document.getElementById("playlists").innerHTML = "Error retrieving playlists: " + error
+    } else {
+      document.getElementById("playlists").innerHTML = playlists.map(function(playlist) {
+        return playlist.snippet.title
+      }).join(",")
+
+      // for(playlist of playlists) {
+      //   document.getElementById("playlists").innerHTML += playlist.snippet.title
+      // }
+    }
+  })
+}
+
+function getPlaylists(pageToken, playlists, callback) {
+  let url = "https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&mine=true"
+  if (pageToken) {
+    url += "&pageToken=" + pageToken
+  }
+
+  let options = { 
+    // credentials: 'include', 
+    headers: {  
+      "Authorization": "Bearer " + accessToken 
+    }
+  }
+
+  fetch(url, options)
+    .then(function(response) {
+      if (response.status != 200) {
+        callback("Error retrieving playlists: " + response.status)
+        return
+      }
+
+      response.json().then(function(data) {
+        for(playlist of data.items) {
+          playlists.push(playlist)
+        }
+
+        if (data.nextPageToken) {
+          getPlaylists(data.nextPageToken, playlists, callback)
+        } else {
+          callback()
+        }
+      })
+    })
+    .catch(function(error) {
+      callback(error)
+    })
+
+}
+
 function handleOauthCallback(url) {
   // Expecting something like:
   // http://localhost/playlist-manager/oauth-callback#access_token=ya29.CiqvkQSLDvp28N_w&token_type=Bearer&expires_in=3600
