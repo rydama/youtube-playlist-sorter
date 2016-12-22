@@ -73,7 +73,7 @@ document.getElementById("get-playlists-button").onclick = function(event) {
     } else {
       document.getElementById("playlists").innerHTML = playlists.map(function(playlist) {
         return playlist.snippet.title
-      }).join(",")
+      }).sort() .join(",")
 
       // for(playlist of playlists) {
       //   document.getElementById("playlists").innerHTML += playlist.snippet.title
