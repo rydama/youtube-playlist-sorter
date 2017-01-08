@@ -51,9 +51,15 @@ document.getElementById("get-playlists-button").onclick = function(event) {
     if (error) {
       document.getElementById("playlists").innerHTML = "Error retrieving playlists: " + error
     } else {
-      document.getElementById("playlists").innerHTML = playlists.map(function(playlist) {
-        return playlist.snippet.title
-      }).sort() .join(",")
+      template = Handlebars.compile($("#playlist-template").html());
+      for(playlist of playlists) {
+        let html = template({id: playlist.id, title: playlist.snippet.title})
+        $("#playlists").append(html)
+
+      }
+      // document.getElementById("playlists").innerHTML = playlists.map(function(playlist) {
+      //   return playlist.snippet.title
+      // }).sort().join(",")
 
       // for(playlist of playlists) {
       //   document.getElementById("playlists").innerHTML += playlist.snippet.title
@@ -62,8 +68,26 @@ document.getElementById("get-playlists-button").onclick = function(event) {
   })
 }
 
+$("#playlists").on("click", ".playlist-link", function(event) {
+  console.log($(event.currentTarget).attr("id"))
+  let playlistId = $(event.currentTarget).attr("id")
+  let playlistItems = []
+  getPlaylistItems(null, playlistId, playlistItems, function(error) {
+    if (error) {
+      console.log(error)
+    } else {
+      for(playlistItem of playlistItems) {
+        let data = playlistItem.snippet
+        console.log(`${data.position} ${data.publishedAt} ${data.title}`)
+
+      }
+    }
+  })
+})
+
 function getPlaylists(pageToken, playlists, callback) {
   let url = "https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&mine=true"
+
   if (pageToken) {
     url += "&pageToken=" + pageToken
   }
@@ -96,7 +120,43 @@ function getPlaylists(pageToken, playlists, callback) {
     .catch(function(error) {
       callback(error)
     })
+}
 
+function getPlaylistItems(pageToken, playlistId, playlistItems, callback) {
+  let url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + playlistId
+
+  if (pageToken) {
+    url += "&pageToken=" + pageToken
+  }
+
+  let options = {
+    headers: {
+      "Authorization": "Bearer " + accessToken
+    }
+  }
+
+  fetch(url, options)
+    .then(function(response) {
+      if (response.status != 200) {
+        callback("Error retrieving playlist items: " + response.status)
+        return
+      }
+
+      response.json().then(function(data) {
+        for(playlistItem of data.items) {
+          playlistItems.push(playlistItem)
+        }
+
+        if (data.nextPageToken) {
+          getPlaylistItems(data.nextPageToken, playlistId, playlistItems, callback)
+        } else {
+          callback()
+        }
+      })
+    })
+    .catch(function(error) {
+      callback(error)
+    })
 }
 
 function handleOauthCallback(url) {
