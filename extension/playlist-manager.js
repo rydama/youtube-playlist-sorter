@@ -8,7 +8,9 @@ const clientId = "728451052888-9pc51r3cra9fo6fp3spuq7h22oi5mtgd.apps.googleuserc
 const redirectUri = "http://localhost/playlist-manager/oauth-callback"
 const scope = "https://www.googleapis.com/auth/youtube"
 
-let accessToken = null
+let playlistManager = {}
+playlistManager.accessToken = null
+playlistManager.playlists = {}
 
 chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
   if (handleOauthCallback(details.url)) {
@@ -36,7 +38,7 @@ document.getElementById("login-button").onclick = function(event) {
 }
 
 document.getElementById("logout-button").onclick = function(event) {
-  revokeToken(accessToken, (error) => {
+  revokeToken(playlistManager.accessToken, (error) => {
     if (!error) {
       console.log("Successfully revoked access token")
     } else {
@@ -53,6 +55,7 @@ document.getElementById("get-playlists-button").onclick = function(event) {
     } else {
       template = Handlebars.compile($("#playlist-template").html());
       for(playlist of playlists) {
+        playlistManager.playlists[playlist.id] = playlist
         let html = template({id: playlist.id, title: playlist.snippet.title})
         $("#playlists").append(html)
 
@@ -76,11 +79,46 @@ $("#playlists").on("click", ".playlist-link", function(event) {
     if (error) {
       console.log(error)
     } else {
+      playlistManager.playlists[playlistId].items = {}
+      for(playlistItem of playlistItems) {
+        playlistManager.playlists[playlistId].items[playlistItem.id] = playlistItem
+        let data = playlistItem.snippet
+        // console.log(playlistItem)
+        console.log(`${data.position} ${data.publishedAt} ${data.title}`)
+      }
+
+      playlistItems.sort(function(a, b) {
+        if (a.snippet.title > b.snippet.title) {
+          return 1
+        } else if (a.snippet.title < b.snippet.title) {
+          return -1
+        } else {
+          return 0
+        }
+      })
+
       for(playlistItem of playlistItems) {
         let data = playlistItem.snippet
+        // console.log(playlistItem)
         console.log(`${data.position} ${data.publishedAt} ${data.title}`)
-
       }
+
+    }
+  })
+})
+
+$("#playlists").on("click", ".playlist-sort-link", function(event) {
+  console.log($(event.currentTarget).attr("id"))
+  let playlistId = $(event.currentTarget).attr("id")
+  let playlistItems = playlistManager.playlists[playlistId].items
+
+  playlistItems.sort(function(a, b) {
+    if (a.snippet.title > b.snippet.title) {
+      return 1
+    } else if (a.snippet.title < b.snippet.title) {
+      return -1
+    } else {
+      return 0
     }
   })
 })
@@ -94,7 +132,7 @@ function getPlaylists(pageToken, playlists, callback) {
 
   let options = {
     headers: {
-      "Authorization": "Bearer " + accessToken
+      "Authorization": "Bearer " + playlistManager.accessToken
     }
   }
 
@@ -131,7 +169,7 @@ function getPlaylistItems(pageToken, playlistId, playlistItems, callback) {
 
   let options = {
     headers: {
-      "Authorization": "Bearer " + accessToken
+      "Authorization": "Bearer " + playlistManager.accessToken
     }
   }
 
@@ -159,6 +197,41 @@ function getPlaylistItems(pageToken, playlistId, playlistItems, callback) {
     })
 }
 
+function updatePlaylistItem(playlistItem, callback) {
+  let url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet"
+
+  let options = {
+    method: 'put',  
+    headers: {
+      "Authorization": "Bearer " + playlistManager.accessToken
+    },
+    body: JSON.stringify()
+  }
+
+  fetch(url, options)
+    .then(function(response) {
+      if (response.status != 200) {
+        callback("Error updating playlistItem: " + response.status)
+        return
+      }
+
+      response.json().then(function(data) {
+        for(playlist of data.items) {
+          playlists.push(playlist)
+        }
+
+        if (data.nextPageToken) {
+          getPlaylists(data.nextPageToken, playlists, callback)
+        } else {
+          callback()
+        }
+      })
+    })
+    .catch(function(error) {
+      callback(error)
+    })
+}
+
 function handleOauthCallback(url) {
   // Expecting something like:
   // http://localhost/playlist-manager/oauth-callback#access_token=ya29.CiqvkQSLDvp28N_w&token_type=Bearer&expires_in=3600
@@ -173,7 +246,7 @@ function handleOauthCallback(url) {
     validateToken(token, function(isValid) {
       if (isValid) {
         document.getElementById("token").innerHTML = token
-        accessToken = token
+        playlistManager.accessToken = token
       } else {
         document.getElementById("token").innerHTML = "invalid token"
       }
