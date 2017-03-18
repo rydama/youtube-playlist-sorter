@@ -15,7 +15,7 @@
   },
   "permissions": [
     "tabs",
-    "webNavigation", 
+    "webNavigation",
     "https://accounts.google.com/",
     "https://www.googleapis.com/"
   ],
