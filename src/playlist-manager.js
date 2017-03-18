@@ -112,15 +112,24 @@ $("#playlists").on("click", ".playlist-sort-link", function(event) {
   let playlistId = $(event.currentTarget).attr("id")
   let playlistItems = playlistManager.playlists[playlistId].items
 
-  playlistItems.sort(function(a, b) {
-    if (a.snippet.title > b.snippet.title) {
+  let items = Object.keys(playlistItems).map(key => playlistItems[key])
+
+  items.sort(function(a, b) {
+    if (a.snippet.title < b.snippet.title) {
       return 1
-    } else if (a.snippet.title < b.snippet.title) {
+    } else if (a.snippet.title > b.snippet.title) {
       return -1
     } else {
       return 0
     }
   })
+
+  for(let item of items) {
+    let data = item.snippet
+    // console.log(playlistItem)
+    console.log(`${data.position} ${data.publishedAt} ${data.title}`)
+  }
+
 })
 
 function getPlaylists(pageToken, playlists, callback) {
