@@ -10,7 +10,7 @@
     "build": "npm run build:bundle && npm run build:background",
     "build:bundle": "browserify src/playlist-manager.js -o extension/bundle.js -t [ babelify --presets [ es2015 ] ]",
     "build:background": "browserify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 ] ]",
-    "watch": "npm run watch:bundle && npm run watch:background",
+    "watch": "npm run watch:bundle & npm run watch:background",
     "watch:bundle": "watchify src/playlist-manager.js -o extension/bundle.js -t [ babelify --presets [ es2015 ] ]",
     "watch:background": "watchify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 ] ]"
   },

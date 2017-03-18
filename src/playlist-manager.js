@@ -53,8 +53,8 @@ document.getElementById("get-playlists-button").onclick = function(event) {
     if (error) {
       document.getElementById("playlists").innerHTML = "Error retrieving playlists: " + error
     } else {
-      template = Handlebars.compile($("#playlist-template").html());
-      for(playlist of playlists) {
+      let template = Handlebars.compile($("#playlist-template").html());
+      for(let playlist of playlists) {
         playlistManager.playlists[playlist.id] = playlist
         let html = template({id: playlist.id, title: playlist.snippet.title})
         $("#playlists").append(html)
@@ -80,7 +80,7 @@ $("#playlists").on("click", ".playlist-link", function(event) {
       console.log(error)
     } else {
       playlistManager.playlists[playlistId].items = {}
-      for(playlistItem of playlistItems) {
+      for(let playlistItem of playlistItems) {
         playlistManager.playlists[playlistId].items[playlistItem.id] = playlistItem
         let data = playlistItem.snippet
         // console.log(playlistItem)
@@ -97,7 +97,7 @@ $("#playlists").on("click", ".playlist-link", function(event) {
         }
       })
 
-      for(playlistItem of playlistItems) {
+      for(let playlistItem of playlistItems) {
         let data = playlistItem.snippet
         // console.log(playlistItem)
         console.log(`${data.position} ${data.publishedAt} ${data.title}`)
@@ -144,7 +144,7 @@ function getPlaylists(pageToken, playlists, callback) {
       }
 
       response.json().then(function(data) {
-        for(playlist of data.items) {
+        for(let playlist of data.items) {
           playlists.push(playlist)
         }
 
@@ -181,7 +181,7 @@ function getPlaylistItems(pageToken, playlistId, playlistItems, callback) {
       }
 
       response.json().then(function(data) {
-        for(playlistItem of data.items) {
+        for(let playlistItem of data.items) {
           playlistItems.push(playlistItem)
         }
 
@@ -216,7 +216,7 @@ function updatePlaylistItem(playlistItem, callback) {
       }
 
       response.json().then(function(data) {
-        for(playlist of data.items) {
+        for(let playlist of data.items) {
           playlists.push(playlist)
         }
 
