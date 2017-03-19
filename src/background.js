@@ -10,7 +10,7 @@
    * creation of the playlist manager page.
    */
   chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.tabs.create({ 'url': chrome.extension.getURL('playlist-manager.html') }, function(newTab) {
+    chrome.tabs.create({ "url": chrome.extension.getURL("app.html") }, function(newTab) {
     });
 
   });

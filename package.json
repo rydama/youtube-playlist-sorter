@@ -8,16 +8,21 @@
   "private": true,
   "scripts": {
     "build": "npm run build:bundle && npm run build:background",
-    "build:bundle": "browserify src/playlist-manager.js -o extension/bundle.js -t [ babelify --presets [ es2015 ] ]",
-    "build:background": "browserify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 ] ]",
+    "build:bundle": "browserify src/app.js --debug --extension=.jsx -o extension/bundle.js -d -t [ babelify --presets [ es2015 react ] ]",
+    "build:background": "browserify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 react ] ]",
     "watch": "npm run watch:bundle & npm run watch:background",
-    "watch:bundle": "watchify src/playlist-manager.js -o extension/bundle.js -t [ babelify --presets [ es2015 ] ]",
-    "watch:background": "watchify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 ] ]"
+    "watch:bundle": "watchify src/app.js --extension=.jsx -o extension/bundle.js -d -t [ babelify --presets [ es2015 react ] ]",
+    "watch:background": "watchify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 react ] ]"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
     "watchify": "^3.9.0"
+  },
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
   }
 }
