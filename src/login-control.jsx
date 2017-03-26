@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function LoginControl(props) {
   if (props.loggedIn) {
     return(

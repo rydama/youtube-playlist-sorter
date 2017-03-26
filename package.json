@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "build": "npm run build:bundle && npm run build:background",
-    "build:bundle": "browserify src/app.js --debug --extension=.jsx -o extension/bundle.js -d -t [ babelify --presets [ es2015 react ] ]",
+    "build:bundle": "browserify src/app.js --extension=.jsx -o extension/bundle.js -d -t [ babelify --presets [ es2015 react ] ]",
     "build:background": "browserify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 react ] ]",
     "watch": "npm run watch:bundle & npm run watch:background",
     "watch:bundle": "watchify src/app.js --extension=.jsx -o extension/bundle.js -d -t [ babelify --presets [ es2015 react ] ]",
