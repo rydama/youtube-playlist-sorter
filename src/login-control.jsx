@@ -13,9 +13,8 @@ export default class LoginControl extends React.Component {
     this.handleOauthCallback = this.handleOauthCallback.bind(this)
     this.validateToken = this.validateToken.bind(this)
 
-    let self = this
-    chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
-      if (self.handleOauthCallback(details.url)) {
+    chrome.webNavigation.onBeforeNavigate.addListener((details) => {
+      if (this.handleOauthCallback(details.url)) {
         chrome.tabs.remove(details.tabId)
       }
     })
@@ -51,12 +50,11 @@ export default class LoginControl extends React.Component {
       let params = url.substring(index + accessTokenParam.length).split("&")
       let token = params[0]
 
-      let self = this
-      this.validateToken(token, function(isValid) {
+      this.validateToken(token, (isValid) => {
         if (isValid) {
-          self.props.onLoginSuccess(token)
+          this.props.onLoginSuccess(token)
         } else {
-          self.props.onLoginFailed()
+          this.props.onLoginFailed()
         }
       })
 
