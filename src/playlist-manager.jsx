@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import LoginControl from "./login-control"
 
 export default class PlaylistManager extends React.Component {
@@ -6,6 +6,7 @@ export default class PlaylistManager extends React.Component {
     super()
 
     this.handleLoginSuccess = this.handleLoginSuccess.bind(this)
+    this.handleLoginFailed = this.handleLoginFailed.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
 
     this.state = {
@@ -15,6 +16,10 @@ export default class PlaylistManager extends React.Component {
 
   handleLoginSuccess(accessToken) {
     this.setState( { accessToken: accessToken} )
+  }
+
+  handleLoginFailed(accessToken) {
+    this.setState( { accessToken: null} )
   }
 
   handleLogout() {
@@ -29,6 +34,9 @@ export default class PlaylistManager extends React.Component {
           isLoggedIn={!!this.state.accessToken}
           onLoginSuccess={this.handleLoginSuccess}
           onLogout={this.handleLogout} />
+        <div>
+          {this.state.accessToken}
+        </div>
       </div>
     )
   }

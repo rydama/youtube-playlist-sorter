@@ -1,14 +1,90 @@
-import React from "react";
+import React from "react"
+
+const revokeTokenUrl = "https://accounts.google.com/o/oauth2/revoke"
+const clientId = "728451052888-9pc51r3cra9fo6fp3spuq7h22oi5mtgd.apps.googleusercontent.com"
+const redirectUri = "http://localhost/playlist-manager/oauth-callback"
+const scope = "https://www.googleapis.com/auth/youtube"
 
 export default class LoginControl extends React.Component {
   constructor(props) {
     super(props)
     this.handleLoginClicked = this.handleLoginClicked.bind(this)
     this.handleLogoutClicked = this.handleLogoutClicked.bind(this)
+    this.handleOauthCallback = this.handleOauthCallback.bind(this)
+    this.validateToken = this.validateToken.bind(this)
+
+    let self = this
+    chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
+      if (self.handleOauthCallback(details.url)) {
+        chrome.tabs.remove(details.tabId)
+      }
+    })
   }
 
   handleLoginClicked() {
-    this.props.onLoginSuccess("TOKEN")
+    let authUrl = "https://accounts.google.com/o/oauth2/auth" +
+      "?client_id=" + clientId +
+      "&redirect_uri=" + encodeURIComponent(redirectUri) +
+      "&scope=" + encodeURIComponent(scope) +
+      "&response_type=token"
+
+    let options = {
+      'url': authUrl,
+      'width': 600,
+      'height': 400,
+      'type': 'popup'
+    }
+
+    chrome.windows.create(options, function(window) {
+      // console.log("tabs: " + window.tabs.length)
+    })
+  }
+  
+  handleOauthCallback(url) {
+    // Expecting something like:
+    // http://localhost/playlist-manager/oauth-callback#access_token=ya29.CiqvkQSLDvp28N_w&token_type=Bearer&expires_in=3600
+
+    if (url.startsWith(redirectUri)) {
+      console.log("handling redirect uri: " + url);
+      let accessTokenParam = "access_token="
+      let index = url.indexOf(accessTokenParam)
+      let params = url.substring(index + accessTokenParam.length).split("&")
+      let token = params[0]
+
+      let self = this
+      this.validateToken(token, function(isValid) {
+        if (isValid) {
+          self.props.onLoginSuccess(token)
+        } else {
+          self.props.onLoginFailed()
+        }
+      })
+
+      return true
+    }
+
+    return false
+  }
+
+  // See https://developers.google.com/youtube/v3/guides/auth/client-side-web-apps
+  validateToken(token, callback) {
+    let url = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token
+
+    fetch(url)
+      .then(function(response) {
+        if (response.status != 200) {
+          callback(false)
+          return
+        }
+
+        response.json().then(function(data) {
+          callback(data.audience == clientId)
+        })
+      })
+      .catch(function(error) {
+        console.log("fetch error: " + error)
+        callback(false)
+      })
   }
 
   handleLogoutClicked() {
