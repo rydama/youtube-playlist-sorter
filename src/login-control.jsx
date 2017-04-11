@@ -35,26 +35,24 @@ export default class LoginControl extends React.Component {
     }
 
     chrome.windows.create(options, function(window) {
-      // console.log("tabs: " + window.tabs.length)
     })
   }
-  
+
   handleOauthCallback(url) {
     // Expecting something like:
     // http://localhost/playlist-manager/oauth-callback#access_token=ya29.CiqvkQSLDvp28N_w&token_type=Bearer&expires_in=3600
 
     if (url.startsWith(redirectUri)) {
-      console.log("handling redirect uri: " + url);
       let accessTokenParam = "access_token="
       let index = url.indexOf(accessTokenParam)
       let params = url.substring(index + accessTokenParam.length).split("&")
       let token = params[0]
 
-      this.validateToken(token, (isValid) => {
-        if (isValid) {
+      this.validateToken(token, (error) => {
+        if (!error) {
           this.props.onLoginSuccess(token)
         } else {
-          this.props.onLoginFailed()
+          this.props.onLoginFailed(error)
         }
       })
 
@@ -66,7 +64,7 @@ export default class LoginControl extends React.Component {
 
   // See https://developers.google.com/youtube/v3/guides/auth/client-side-web-apps
   validateToken(token, callback) {
-    let url = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token
+    let url = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`
 
     fetch(url)
       .then(function(response) {
@@ -76,12 +74,11 @@ export default class LoginControl extends React.Component {
         }
 
         response.json().then(function(data) {
-          callback(data.audience == clientId)
+          callback(data.audience == clientId ? null : "Mismatched client ID")
         })
       })
       .catch(function(error) {
-        console.log("fetch error: " + error)
-        callback(false)
+        callback(error)
       })
   }
 

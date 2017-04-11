@@ -10,7 +10,8 @@ export default class PlaylistManager extends React.Component {
     this.handleLogout = this.handleLogout.bind(this)
 
     this.state = {
-      accessToken: null
+      accessToken: null,
+      loginError: null
     }
   }
 
@@ -18,8 +19,8 @@ export default class PlaylistManager extends React.Component {
     this.setState( { accessToken: accessToken} )
   }
 
-  handleLoginFailed(accessToken) {
-    this.setState( { accessToken: null} )
+  handleLoginFailed(error) {
+    this.setState( { accessToken: null, loginError: error } )
   }
 
   handleLogout() {
@@ -33,6 +34,7 @@ export default class PlaylistManager extends React.Component {
         <LoginControl
           isLoggedIn={!!this.state.accessToken}
           onLoginSuccess={this.handleLoginSuccess}
+          onLoginFailed={this.handleLoginFailed}
           onLogout={this.handleLogout} />
         <div>
           {this.state.accessToken}
