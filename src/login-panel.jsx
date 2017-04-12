@@ -1,23 +1,29 @@
 import React from "react"
 
-const revokeTokenUrl = "https://accounts.google.com/o/oauth2/revoke"
 const clientId = "728451052888-9pc51r3cra9fo6fp3spuq7h22oi5mtgd.apps.googleusercontent.com"
 const redirectUri = "http://localhost/playlist-manager/oauth-callback"
 const scope = "https://www.googleapis.com/auth/youtube"
 
-export default class LoginControl extends React.Component {
+export default class LoginPanel extends React.Component {
   constructor(props) {
     super(props)
     this.handleLoginClicked = this.handleLoginClicked.bind(this)
-    this.handleLogoutClicked = this.handleLogoutClicked.bind(this)
     this.handleOauthCallback = this.handleOauthCallback.bind(this)
     this.validateToken = this.validateToken.bind(this)
+
+    this.state = {
+      loginError: null
+    }
 
     chrome.webNavigation.onBeforeNavigate.addListener((details) => {
       if (this.handleOauthCallback(details.url)) {
         chrome.tabs.remove(details.tabId)
       }
     })
+  }
+
+  onLoginFailed(error) {
+    this.setState({ loginError: error })
   }
 
   handleLoginClicked() {
@@ -52,7 +58,7 @@ export default class LoginControl extends React.Component {
         if (!error) {
           this.props.onLoginSuccess(token)
         } else {
-          this.props.onLoginFailed(error)
+          this.onLoginFailed(error)
         }
       })
 
@@ -82,23 +88,24 @@ export default class LoginControl extends React.Component {
       })
   }
 
-  handleLogoutClicked() {
-    this.props.onLogout()
-  }
-
   render() {
-    if (this.props.isLoggedIn) {
-      return(
-        <p>
-          <button onClick={this.handleLogoutClicked}>Logout</button>
-        </p>
-      );
-    } else {
-      return(
-        <p>
-          <button onClick={this.handleLoginClicked}>Login with YouTube</button>
-        </p>
-      );
+    let errorDiv = <div/>
+    if (this.props.loginError) {
+      errorDiv =
+        <div class={this.props.loginError ? "" : "hidden" }>
+          Login failed: {this.props.loginError}
+        </div>
     }
+
+    return(
+      <div>
+        <div>Playlist Manager</div>
+        <div>
+          <button onClick={this.handleLoginClicked}>Login with YouTube</button>
+        </div>
+
+        {errorDiv}
+      </div>
+    )
   }
 }

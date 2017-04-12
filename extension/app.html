@@ -4,31 +4,15 @@
     <meta charset="UTF-8">
     <title>YouTube Playlist Manager</title>
 
-    <script id="playlist-template" type="text/x-handlebars-template">
-      <div>
-        <a href="#" id="{{id}}" class="playlist-link">{{title}}</a>
-        <a href="#" id="{{id}}" class="playlist-sort-link">sort</a>
-      </div>
-    </script>
+    <link rel="stylesheet" href="styles/playlist-manager.css">
+
   </head>
 
   <body>
     <div id="playlist-manager">
     </div>
-
-    <div id="token">
-    </div>
-
-    <p>
-      <button id="get-playlists-button">Get Playlists</button>
-    </p>
-
-    <div id="playlists">
-    </div>
-
   </body>
 
   <script src="vendor/jquery-2.2.4.min.js"></script>
-  <script src="vendor/handlebars-v4.0.5.js"></script>
   <script src="bundle.js"></script>
 </html>
