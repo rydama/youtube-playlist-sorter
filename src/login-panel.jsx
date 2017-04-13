@@ -10,19 +10,29 @@ export default class LoginPanel extends React.Component {
     this.handleLoginClicked = this.handleLoginClicked.bind(this)
     this.handleOauthCallback = this.handleOauthCallback.bind(this)
     this.validateToken = this.validateToken.bind(this)
+    this.handleBeforeNavigate = this.handleBeforeNavigate.bind(this)
 
     this.state = {
       loginError: null
     }
-
-    chrome.webNavigation.onBeforeNavigate.addListener((details) => {
-      if (this.handleOauthCallback(details.url)) {
-        chrome.tabs.remove(details.tabId)
-      }
-    })
   }
 
-  onLoginFailed(error) {
+  componentDidMount() {
+    chrome.webNavigation.onBeforeNavigate.addListener(this.handleBeforeNavigate)
+  }
+
+  componentWillUnmount() {
+    chrome.webNavigation.onBeforeNavigate.removeListener(this.handleBeforeNavigate)
+  }
+
+  handleBeforeNavigate(details) {
+    if (this.handleOauthCallback(details.url)) {
+      // Close the login window
+      chrome.tabs.remove(details.tabId)
+    }
+  }
+
+  handleLoginFailed(error) {
     this.setState({ loginError: error })
   }
 
@@ -58,7 +68,7 @@ export default class LoginPanel extends React.Component {
         if (!error) {
           this.props.onLoginSuccess(token)
         } else {
-          this.onLoginFailed(error)
+          this.handleLoginFailed(error)
         }
       })
 
