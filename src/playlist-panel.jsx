@@ -1,4 +1,5 @@
 import React from "react"
+import PlaylistItem from "./playlist-item"
 
 export default class PlaylistPanel extends React.Component {
 
@@ -84,11 +85,14 @@ export default class PlaylistPanel extends React.Component {
   }
 
   render() {
+    const playlistItems = this.state.playlists.map((playlist) =>
+      <PlaylistItem playlist={playlist} />
+    )
+
     return(
       <div>
-        {this.state.playlists.length} playlists found
+        <ul>{playlistItems}</ul>
       </div>
     )
   }
-
 }
