@@ -1,5 +1,5 @@
 import React from "react"
-import PlaylistItem from "./playlist-item"
+import PlaylistLink from "./playlist-link"
 
 export default class PlaylistPanel extends React.Component {
 
@@ -17,9 +17,8 @@ export default class PlaylistPanel extends React.Component {
   }
 
   loadPlaylists() {
-    let token = this.props.accessToken
-
     let playlists = []
+
     this.getPlaylists(null, playlists, (error) => {
       if (error) {
         this.props.onError(`Error retrieving playlists: ${error}`)
@@ -29,20 +28,6 @@ export default class PlaylistPanel extends React.Component {
         })
 
         this.props.onProgressStop()
-
-        // for(let playlist of playlists) {
-        //   playlistManager.playlists[playlist.id] = playlist
-        //   let html = template({id: playlist.id, title: playlist.snippet.title})
-        //   $("#playlists").append(html)
-
-        // }
-        // document.getElementById("playlists").innerHTML = playlists.map(function(playlist) {
-        //   return playlist.snippet.title
-        // }).sort().join(",")
-
-        // for(playlist of playlists) {
-        //   document.getElementById("playlists").innerHTML += playlist.snippet.title
-        // }
       }
     })
   }
@@ -85,13 +70,13 @@ export default class PlaylistPanel extends React.Component {
   }
 
   render() {
-    const playlistItems = this.state.playlists.map((playlist) =>
-      <PlaylistItem playlist={playlist} />
+    const playlistLinks = this.state.playlists.map((playlist) =>
+      <PlaylistLink key={playlist.id} playlist={playlist} onPlaylistSelected={this.props.onPlaylistSelected} />
     )
 
     return(
       <div>
-        <ul>{playlistItems}</ul>
+        <ul>{playlistLinks}</ul>
       </div>
     )
   }
