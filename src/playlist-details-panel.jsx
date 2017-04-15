@@ -77,6 +77,7 @@ export default class PlaylistDetailsPanel extends React.Component {
     return(
       <div>
         <h2>{this.props.playlist.snippet.title}</h2>
+        <button>A-Z</button>
         <ul>{items}</ul>
       </div>
     )

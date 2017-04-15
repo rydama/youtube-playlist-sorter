@@ -24,7 +24,7 @@ export default class PlaylistPanel extends React.Component {
         this.props.onError(`Error retrieving playlists: ${error}`)
       } else {
         this.setState({
-          playlists: playlists
+          playlists: this.sortPlaylists(playlists)
         })
 
         this.props.onProgressStop()
@@ -67,6 +67,20 @@ export default class PlaylistPanel extends React.Component {
       .catch((error) => {
         callback(error)
       })
+  }
+
+  sortPlaylists(playlists) {
+    playlists.sort((a, b) => {
+      if (a.snippet.title < b.snippet.title) {
+        return -1
+      }
+      if (a.snippet.title > b.snippet.title) {
+        return 1
+      }
+      return 0
+    })
+
+    return playlists
   }
 
   render() {

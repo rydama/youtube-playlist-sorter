@@ -109,10 +109,6 @@ export default class PlaylistManager extends React.Component {
         <button className={this.state.accessToken ? "" : "hidden"} onClick={this.handleLogout}>Logout</button>
 
         {this.getCurrentPanel()}
-
-        <div>
-          {this.state.accessToken}
-        </div>
       </div>
     )
   }
