@@ -210,7 +210,7 @@ function updatePlaylistItem(playlistItem, callback) {
   let url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet"
 
   let options = {
-    method: 'put',  
+    method: 'put',
     headers: {
       "Authorization": "Bearer " + playlistManager.accessToken
     },
