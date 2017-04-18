@@ -4,6 +4,7 @@ export default class PlaylistDetailsPanel extends React.Component {
   constructor(props) {
     super(props)
 
+    this.requestInProgress = false
     this.handleSortClicked = this.handleSortClicked.bind(this)
 
     this.state = {
@@ -16,7 +17,15 @@ export default class PlaylistDetailsPanel extends React.Component {
     this.loadPlaylistItems()
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // We get an update when we start our sort request because we
+    // call this.props.onProgressStart(...).
+    // Prevent his update.
+    return !this.requestInProgress
+  }
+
   handleSortClicked(isDescending) {
+    this.requestInProgress = true
     this.props.onProgressStart("Sorting videos...")
 
     let playlistItems = this.sortPlaylistItems(this.state.playlistItems, isDescending)
@@ -26,7 +35,8 @@ export default class PlaylistDetailsPanel extends React.Component {
     }
 
     this.updatePlaylistItems(playlistItems, (error) => {
-      this.props.onProgressStop()
+      this.requestInProgress = false
+
       if (error) {
         this.props.onError(error)
       } else {
@@ -34,6 +44,8 @@ export default class PlaylistDetailsPanel extends React.Component {
           playlistItems: playlistItems
         })
       }
+
+      this.props.onProgressStop()
     })
   }
 
