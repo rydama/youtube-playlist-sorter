@@ -50,7 +50,8 @@ export default class PlaylistManager extends React.Component {
 
   handleProgressStart(message) {
     this.setState({
-      progressMessage: message
+      progressMessage: message,
+      errorMessage: null
     })
   }
 

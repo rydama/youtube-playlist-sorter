@@ -17,13 +17,13 @@ export default class PlaylistDetailsPanel extends React.Component {
   }
 
   handleSortClicked(isDescending) {
+    this.props.onProgressStart("Sorting videos...")
+
     let playlistItems = this.sortPlaylistItems(this.state.playlistItems, isDescending)
 
     for (let [index, playlistItem] of playlistItems.entries()) {
       playlistItem.snippet.position = index
     }
-
-    this.props.onProgressStart("Sorting videos...")
 
     this.updatePlaylistItems(playlistItems, (error) => {
       this.props.onProgressStop()
@@ -141,31 +141,12 @@ export default class PlaylistDetailsPanel extends React.Component {
       body: JSON.stringify(playlistItem)
     }
 
-    console.log("updating", playlistItem.snippet.title, playlistItem.snippet.position)
-
     fetch(url, options)
       .then((response) => {
         if (response.status != 200) {
-
-          response.text().then((data) => {
-            console.log(data)
-            callback("Error updating playlistItem: " + response.status)
+          response.json().then((data) => {
+            callback(this.getErrorMessage(data) || `updating playlistItem: ${response.status}`)
           })
-
-          // handle 400 manualSortRequired
-          //{
-          //  "error": {
-          //   "errors": [
-          //    {
-          //     "domain": "youtube.playlistItem",
-          //     "reason": "manualSortRequired",
-          //     "message": "Playlist sort type need to be MANUAL to support position."
-          //    }
-          //   ],
-          //   "code": 400,
-          //   "message": "Playlist sort type need to be MANUAL to support position."
-          //  }
-          // }
 
           return
         }
@@ -175,6 +156,23 @@ export default class PlaylistDetailsPanel extends React.Component {
       .catch((error) => {
         callback(error)
       })
+  }
+
+  getErrorMessage(data) {
+    let error = data.error
+
+    if (error) {
+      if (error.errors && error.errors.length > 0) {
+        if (error.errors[0].reason == "manualSortRequired") {
+          let url = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
+          return `You must first change the playlist settings ordering to Manual at ${url}`
+        }
+      }
+
+      return `${error.code}: error.message`
+    }
+
+    return null;
   }
 
   render() {
