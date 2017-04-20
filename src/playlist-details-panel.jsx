@@ -181,7 +181,7 @@ export default class PlaylistDetailsPanel extends React.Component {
         }
       }
 
-      return `${error.code}: error.message`
+      return `${error.code}: ${error.message}`
     }
 
     return null;
