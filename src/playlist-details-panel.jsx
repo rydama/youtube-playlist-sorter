@@ -34,19 +34,18 @@ export default class PlaylistDetailsPanel extends React.Component {
       playlistItem.snippet.position = index
     }
 
-    this.updatePlaylistItems(playlistItems, (error) => {
+    this.updatePlaylistItems(playlistItems).then(() => {
       this.requestInProgress = false
-
-      if (error) {
-        this.props.onError(error)
-      } else {
-        this.setState({
-          playlistItems: playlistItems
-        })
-      }
-
-      this.props.onProgressStop()
+      this.setState({
+        playlistItems: playlistItems
+      })
     })
+    .catch((error) =>
+      this.props.onError(error.message)
+    )
+    .then(() =>
+      this.props.onProgressStop()
+    )
   }
 
   loadPlaylistItems() {
@@ -126,22 +125,12 @@ export default class PlaylistDetailsPanel extends React.Component {
     return playlistItems
   }
 
-  updatePlaylistItems(playlistItems, callback) {
-    let toUpdate = Array.from(playlistItems)
-    let playlistItem = toUpdate.shift()
-
-    this.updatePlaylistItem(playlistItem, (error) => {
-      if (error) {
-        callback(error)
-      } else if (toUpdate.length) {
-        this.updatePlaylistItems(toUpdate, callback)
-      } else {
-        callback()
-      }
-    })
+  updatePlaylistItems(playlistItems) {
+    let promises = playlistItems.map((playlistItem) => this.updatePlaylistItem(playlistItem))
+    return Promise.all(promises)
   }
 
-  updatePlaylistItem(playlistItem, callback) {
+  updatePlaylistItem(playlistItem) {
     let url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet"
 
     let options = {
@@ -153,21 +142,13 @@ export default class PlaylistDetailsPanel extends React.Component {
       body: JSON.stringify(playlistItem)
     }
 
-    fetch(url, options)
-      .then((response) => {
-        if (response.status != 200) {
-          response.json().then((data) => {
-            callback(this.getErrorMessage(data) || `updating playlistItem: ${response.status}`)
-          })
-
-          return
-        }
-
-        callback()
-      })
-      .catch((error) => {
-        callback(error)
-      })
+    return fetch(url, options).then((response) => {
+      if (!response.ok) {
+        response.json().then((data) => {
+          throw new Error(this.getErrorMessage(data) || `updating playlistItem: ${response.status}`)
+        })
+      }
+    })
   }
 
   getErrorMessage(data) {
@@ -190,7 +171,7 @@ export default class PlaylistDetailsPanel extends React.Component {
   render() {
     let items = this.state.playlistItems.map((playlistItem) =>
       <li key={playlistItem.id}>
-        <p>{playlistItem.snippet.position} {playlistItem.snippet.title} {playlistItem.snippet.publishedAt}</p>
+        <p>{playlistItem.snippet.title} {playlistItem.snippet.publishedAt}</p>
       </li>
     )
 
