@@ -173,6 +173,8 @@ export default class PlaylistDetailsPanel extends React.Component {
       body: JSON.stringify(playlistItem)
     }
 
+    this.props.onProgressStart(`Sorting video ${playlistItem.snippet.title}...`)
+
     return fetch(url, options)
   }
 
