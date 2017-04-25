@@ -1,8 +1,8 @@
 /**
  * Chrome extension background script.
  *
- * This script runs whenever the extension is loaded. It manages the listeners and sends messages
- * to control the playlist-manager script.
+ * This script runs whenever the extension is loaded.
+ * It listens for our button being clicked and creates a new tab for our UI.
  */
 {
   /**
