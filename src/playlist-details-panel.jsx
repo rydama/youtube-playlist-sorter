@@ -8,7 +8,8 @@ export default class PlaylistDetailsPanel extends React.Component {
     this.handleSortClicked = this.handleSortClicked.bind(this)
 
     this.state = {
-      playlistItems: []
+      playlistItems: [],
+      playlistsLoaded: false
     }
   }
 
@@ -31,9 +32,16 @@ export default class PlaylistDetailsPanel extends React.Component {
       </li>
     )
 
+    let videoCountText = ""
+    if (this.state.playlistsLoaded) {
+      videoCountText = this.state.playlistItems.length == 1 ?
+      "(1 video)" :
+      `(${this.state.playlistItems.length} videos)`
+    }
+
     return(
       <div>
-        <h2>{this.props.playlist.snippet.title}</h2>
+        <h2>{this.props.playlist.snippet.title} {videoCountText}</h2>
         <button onClick={() => this.handleSortClicked(false)}>A-Z</button>
         <button onClick={() => this.handleSortClicked(true)}>Z-A</button>
         <ul>{items}</ul>
@@ -74,7 +82,8 @@ export default class PlaylistDetailsPanel extends React.Component {
         this.props.onError(`Error retrieving playlist details: ${error}`)
       } else {
         this.setState({
-          playlistItems: playlistItems
+          playlistItems: playlistItems,
+          playlistsLoaded: true
         })
 
         this.props.onProgressStop()
@@ -83,7 +92,7 @@ export default class PlaylistDetailsPanel extends React.Component {
   }
 
   getPlaylistItems(pageToken, playlistId, playlistItems, callback) {
-    let url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}`
+    let url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50`
 
     if (pageToken) {
       url += "&pageToken=" + pageToken
