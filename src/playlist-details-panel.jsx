@@ -34,30 +34,19 @@ export default class PlaylistDetailsPanel extends React.Component {
       playlistItem.snippet.position = index
     }
 
-    this.updatePlaylistItems(playlistItems).then((responses) => {
-      let errorResponse = this.firstErrorResponse(responses)
-      if (errorResponse) {
-        errorResponse.json().then((data) => {
-          let message = this.getErrorMessage(data) || `updating playlistItem: ${errorResponse.status}`
-          this.props.onError(message)
-        })
-      } else {
-        this.requestInProgress = false
-        this.setState({
-          playlistItems: playlistItems
-        })
-      }
+    this.updatePlaylistItems(Array.from(playlistItems)).then(() => {
+      this.requestInProgress = false
+      this.setState({
+        playlistItems: playlistItems
+      })
     })
-    .catch((error) =>
+    .catch((error) => {
       this.props.onError(error.message)
-    )
-    .then(() =>
+    })
+    .then(() => {
       this.props.onProgressStop()
-    )
-  }
-
-  firstErrorResponse(responses) {
-    return responses.find((response) => !response.ok )
+      this.requestInProgress = false
+    })
   }
 
   loadPlaylistItems() {
@@ -137,28 +126,13 @@ export default class PlaylistDetailsPanel extends React.Component {
     return playlistItems
   }
 
-  updatePlaylistItems(playlistItems) {
-    let promises = []
-
-    // The YouTube API for updating the playlistItem doesn't work if all the requests
-    // hit at once. We need to stagger the requests, but we don't want to serialize them.
-    // It takes too long if we wait for each request to finish before starting the next one.
-    // So we just stagger them by 150ms.
-    for (let playlistItem of playlistItems) {
-      let delay = playlistItem.snippet.position * 150
-      let promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          // Resolve the outer promise once the inner promise is resolved.
-          this.updatePlaylistItem(playlistItem)
-            .then((response) => resolve(response))
-            .catch((error) => reject(error))
-        }, delay)
-      })
-
-      promises.push(promise)
-    }
-
-    return Promise.all(promises)
+  updatePlaylistItems(itemsRemaining) {
+    let toUpdate = itemsRemaining.shift()
+    return this.updatePlaylistItem(toUpdate).then(() => {
+      if (itemsRemaining.length > 0) {
+        return this.updatePlaylistItems(itemsRemaining)
+      }
+    })
   }
 
   updatePlaylistItem(playlistItem) {
@@ -175,7 +149,14 @@ export default class PlaylistDetailsPanel extends React.Component {
 
     this.props.onProgressStart(`Sorting video ${playlistItem.snippet.title}...`)
 
-    return fetch(url, options)
+    return fetch(url, options).then((response) => {
+      if (!response.ok) {
+        return response.json().then((data) => {
+          let message = this.getErrorMessage(data) || `updating playlistItem: ${response.status}`
+          throw new Error(message)
+        })
+      }
+    })
   }
 
   getErrorMessage(data) {
@@ -198,7 +179,7 @@ export default class PlaylistDetailsPanel extends React.Component {
   render() {
     let items = this.state.playlistItems.map((playlistItem) =>
       <li key={playlistItem.id}>
-        <p>{playlistItem.snippet.title}</p>
+        <p>{playlistItem.snippet.position} {playlistItem.snippet.title}</p>
       </li>
     )
 
