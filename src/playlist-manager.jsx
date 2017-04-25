@@ -80,6 +80,10 @@ export default class PlaylistManager extends React.Component {
   }
 
   handleLogout() {
+    this.revokeToken(this.state.accessToken).catch((error) => {
+      console.log("Could not revoke token:", error.message)
+    })
+
     this.setState({
       accessToken: null,
       currentPanelId: loginPanelId
@@ -112,5 +116,10 @@ export default class PlaylistManager extends React.Component {
     }
 
     return panel
+  }
+
+  revokeToken(token) {
+    const url = `https://accounts.google.com/o/oauth2/revoke?token=${token}`
+    return fetch(url)
   }
 }
