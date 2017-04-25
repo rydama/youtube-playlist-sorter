@@ -28,6 +28,24 @@ export default class PlaylistManager extends React.Component {
     }
   }
 
+  render() {
+    return(
+      <div>
+        <h1>YouTube Playlist Manager</h1>
+
+        <a href="#" className={this.state.currentPanelId == playlistDetailsPanelId ? "" : "hidden"} onClick={this.handleBackToPlaylists}>Back to Playlists</a>
+
+        <div className={this.state.errorMessage ? "" : "hidden"}>Error: {this.state.errorMessage}</div>
+
+        <div>{this.state.progressMessage}</div>
+
+        <button className={this.state.accessToken ? "" : "hidden"} onClick={this.handleLogout}>Logout</button>
+
+        {this.getCurrentPanel()}
+      </div>
+    )
+  }
+
   handleLoginSuccess(accessToken) {
     this.setState({
       accessToken: accessToken,
@@ -94,23 +112,5 @@ export default class PlaylistManager extends React.Component {
     }
 
     return panel
-  }
-
-  render() {
-    return(
-      <div>
-        <h1>YouTube Playlist Manager</h1>
-
-        <a href="#" className={this.state.currentPanelId == playlistDetailsPanelId ? "" : "hidden"} onClick={this.handleBackToPlaylists}>Back to Playlists</a>
-
-        <div className={this.state.errorMessage ? "" : "hidden"}>Error: {this.state.errorMessage}</div>
-
-        <div>{this.state.progressMessage}</div>
-
-        <button className={this.state.accessToken ? "" : "hidden"} onClick={this.handleLogout}>Logout</button>
-
-        {this.getCurrentPanel()}
-      </div>
-    )
   }
 }

@@ -24,6 +24,23 @@ export default class PlaylistDetailsPanel extends React.Component {
     return !this.requestInProgress
   }
 
+  render() {
+    let items = this.state.playlistItems.map((playlistItem) =>
+      <li key={playlistItem.id}>
+        <p>{playlistItem.snippet.position} {playlistItem.snippet.title}</p>
+      </li>
+    )
+
+    return(
+      <div>
+        <h2>{this.props.playlist.snippet.title}</h2>
+        <button onClick={() => this.handleSortClicked(false)}>A-Z</button>
+        <button onClick={() => this.handleSortClicked(true)}>Z-A</button>
+        <ul>{items}</ul>
+      </div>
+    )
+  }
+
   handleSortClicked(isDescending) {
     this.requestInProgress = true
     this.props.onProgressStart("Sorting videos...")
@@ -174,22 +191,5 @@ export default class PlaylistDetailsPanel extends React.Component {
     }
 
     return null;
-  }
-
-  render() {
-    let items = this.state.playlistItems.map((playlistItem) =>
-      <li key={playlistItem.id}>
-        <p>{playlistItem.snippet.position} {playlistItem.snippet.title}</p>
-      </li>
-    )
-
-    return(
-      <div>
-        <h2>{this.props.playlist.snippet.title}</h2>
-        <button onClick={() => this.handleSortClicked(false)}>A-Z</button>
-        <button onClick={() => this.handleSortClicked(true)}>Z-A</button>
-        <ul>{items}</ul>
-      </div>
-    )
   }
 }

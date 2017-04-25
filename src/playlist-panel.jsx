@@ -16,6 +16,18 @@ export default class PlaylistPanel extends React.Component {
     this.loadPlaylists()
   }
 
+  render() {
+    const playlistLinks = this.state.playlists.map((playlist) =>
+      <PlaylistLink key={playlist.id} playlist={playlist} onPlaylistSelected={this.props.onPlaylistSelected} />
+    )
+
+    return(
+      <div>
+        <ul>{playlistLinks}</ul>
+      </div>
+    )
+  }
+
   loadPlaylists() {
     let playlists = []
 
@@ -81,17 +93,5 @@ export default class PlaylistPanel extends React.Component {
     })
 
     return playlists
-  }
-
-  render() {
-    const playlistLinks = this.state.playlists.map((playlist) =>
-      <PlaylistLink key={playlist.id} playlist={playlist} onPlaylistSelected={this.props.onPlaylistSelected} />
-    )
-
-    return(
-      <div>
-        <ul>{playlistLinks}</ul>
-      </div>
-    )
   }
 }

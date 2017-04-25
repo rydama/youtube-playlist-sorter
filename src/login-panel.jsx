@@ -25,6 +25,27 @@ export default class LoginPanel extends React.Component {
     chrome.webNavigation.onBeforeNavigate.removeListener(this.handleBeforeNavigate)
   }
 
+  render() {
+    let errorDiv = <div/>
+    if (this.props.loginError) {
+      errorDiv =
+        <div class={this.props.loginError ? "" : "hidden" }>
+          Login failed: {this.props.loginError}
+        </div>
+    }
+
+    return(
+      <div>
+        <div>Playlist Manager</div>
+        <div>
+          <button onClick={this.handleLoginClicked}>Login with YouTube</button>
+        </div>
+
+        {errorDiv}
+      </div>
+    )
+  }
+
   handleBeforeNavigate(details) {
     if (this.handleOauthCallback(details.url)) {
       // Close the login window
@@ -96,26 +117,5 @@ export default class LoginPanel extends React.Component {
       .catch(function(error) {
         callback(error)
       })
-  }
-
-  render() {
-    let errorDiv = <div/>
-    if (this.props.loginError) {
-      errorDiv =
-        <div class={this.props.loginError ? "" : "hidden" }>
-          Login failed: {this.props.loginError}
-        </div>
-    }
-
-    return(
-      <div>
-        <div>Playlist Manager</div>
-        <div>
-          <button onClick={this.handleLoginClicked}>Login with YouTube</button>
-        </div>
-
-        {errorDiv}
-      </div>
-    )
   }
 }
