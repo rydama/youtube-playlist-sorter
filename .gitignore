@@ -1,3 +1,5 @@
 node_modules
 extension/bundle.js
 extension/background.js
+extension/styles/bootstrap-theme.min.css
+extension/styles/bootstrap.min.css
