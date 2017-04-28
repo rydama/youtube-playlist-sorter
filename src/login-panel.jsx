@@ -74,11 +74,18 @@ export default class LoginPanel extends React.Component {
       "&scope=" + encodeURIComponent(scope) +
       "&response_type=token"
 
+    let width = 600
+    let height = 400
+    let left = (screen.width/2) - (width/2)
+    let top = (screen.height/2) - (height/2)
+
     let options = {
-      'url': authUrl,
-      'width': 600,
-      'height': 400,
-      'type': 'popup'
+      "url": authUrl,
+      "width": width,
+      "height": height,
+      "left": left,
+      "top": top,
+      "type": "popup"
     }
 
     chrome.windows.create(options, function(window) {
