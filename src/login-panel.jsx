@@ -46,7 +46,7 @@ export default class LoginPanel extends React.Component {
 
           <div className="row">
             <div className="col-md-12 center-text">
-              <button className="btn btn-info" onClick={this.handleLoginClicked}>Login with YouTube</button>
+              <button className="btn btn-info login-button" onClick={this.handleLoginClicked}>Login with YouTube</button>
             </div>
           </div>
 
