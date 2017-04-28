@@ -18,20 +18,35 @@ export default class PlaylistManager extends React.Component {
     this.handleProgressStop = this.handleProgressStop.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
     this.handleError = this.handleError.bind(this)
+    this.handleResize = this.handleResize.bind(this)
 
     this.state = {
       accessToken: null,
       currentPanelId: loginPanelId,
       currentPlaylist: null,
       loginError: null,
-      progressMessage: null
+      progressMessage: null,
+      width: 0,
+      height: 0
     }
   }
 
+  componentDidMount() {
+    this.handleResize()
+    window.addEventListener("resize", this.handleResize)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize)
+  }
+
+
   render() {
     return(
-      <div>
-        <h1>YouTube Playlist Manager</h1>
+      <div style={{ width: this.state.width, height: this.state.height }}>
+        <div className="row hidden">
+          <h1>Playlist Manager</h1>
+        </div>
 
         <a href="#" className={this.state.currentPanelId == playlistDetailsPanelId ? "" : "hidden"} onClick={this.handleBackToPlaylists}>Back to Playlists</a>
 
@@ -93,6 +108,13 @@ export default class PlaylistManager extends React.Component {
   handleError(message) {
     this.setState({
       errorMessage: message
+    })
+  }
+
+  handleResize() {
+    this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
     })
   }
 

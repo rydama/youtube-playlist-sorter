@@ -35,13 +35,23 @@ export default class LoginPanel extends React.Component {
     }
 
     return(
-      <div>
-        <div>Playlist Manager</div>
-        <div>
-          <button className="btn btn-info" onClick={this.handleLoginClicked}>Login with YouTube</button>
-        </div>
+      <div className="container">
+        <div className="login">
+          <div className="row">
+            <div className="col-md-12">
+              <h1>YouTube Playlist Manager</h1>
+            </div>
+          </div>
 
-        {errorDiv}
+
+          <div className="row">
+            <div className="col-md-12 center-text">
+              <button className="btn btn-info" onClick={this.handleLoginClicked}>Login with YouTube</button>
+            </div>
+          </div>
+
+          {errorDiv}
+        </div>
       </div>
     )
   }
