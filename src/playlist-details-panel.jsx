@@ -40,18 +40,20 @@ export default class PlaylistDetailsPanel extends React.Component {
     }
 
     return(
-      <div>
+      <div className="content-panel container">
         <div className="row">
-          <div col-xs-6>
-            <button onClick={() => this.props.onBackToPlaylists()}>Back to Playlists</button>
+          <div className="col-xs-4">
+            <a href="#" onClick={() => this.props.onBackToPlaylists()}>Back to Playlists</a>
           </div>
-          <div col-xs-6>
-            <h2>{this.props.playlist.snippet.title} {videoCountText}</h2>
+          <div className="col-xs-4 playlist-title center-text">
+            {this.props.playlist.snippet.title} {videoCountText}
+          </div>
+          <div className="col-xs-4">
           </div>
         </div>
         <div>
-          <button onClick={() => this.handleSortClicked(false)}>A-Z</button>
-          <button onClick={() => this.handleSortClicked(true)}>Z-A</button>
+          <button className="btn btn-info" onClick={() => this.handleSortClicked(false)}>A-Z</button>
+          <button className="btn btn-info" onClick={() => this.handleSortClicked(true)}>Z-A</button>
           <ul>{items}</ul>
         </div>
       </div>

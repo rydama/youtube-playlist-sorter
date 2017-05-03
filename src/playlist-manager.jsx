@@ -44,7 +44,7 @@ export default class PlaylistManager extends React.Component {
 
   render() {
     return(
-      <div style={{ width: this.state.width, height: this.state.height }}>
+      <div className="playlist-manager" style={{ width: this.state.width, height: this.state.height }}>
         {this.getHeader()}
         {this.getCurrentPanel()}
       </div>

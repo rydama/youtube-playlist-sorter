@@ -35,7 +35,7 @@ export default class LoginPanel extends React.Component {
     }
 
     return(
-      <div className="container">
+      <div className="flex-container">
         <div className="login">
           <div className="row">
             <div className="col-md-12">
