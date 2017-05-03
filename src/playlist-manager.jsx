@@ -1,5 +1,6 @@
 import React from "react"
 import LoginPanel from "./login-panel"
+import Header from "./header"
 import PlaylistPanel from "./playlist-panel"
 import PlaylistDetailsPanel from "./playlist-details-panel"
 
@@ -44,18 +45,7 @@ export default class PlaylistManager extends React.Component {
   render() {
     return(
       <div style={{ width: this.state.width, height: this.state.height }}>
-        <div className="row hidden">
-          <h1>Playlist Manager</h1>
-        </div>
-
-        <a href="#" className={this.state.currentPanelId == playlistDetailsPanelId ? "" : "hidden"} onClick={this.handleBackToPlaylists}>Back to Playlists</a>
-
-        <div className={this.state.errorMessage ? "" : "hidden"}>Error: {this.state.errorMessage}</div>
-
-        <div>{this.state.progressMessage}</div>
-
-        <button className={this.state.accessToken ? "" : "hidden"} onClick={this.handleLogout}>Logout</button>
-
+        {this.getHeader()}
         {this.getCurrentPanel()}
       </div>
     )
@@ -118,6 +108,14 @@ export default class PlaylistManager extends React.Component {
     })
   }
 
+  getHeader() {
+    let statusMessage = this.state.errorMessage || this.state.progressMessage
+    if (this.state.currentPanelId != loginPanelId) {
+      return <Header statusMessage={statusMessage} onLogout={this.handleLogout} />
+    }
+    return null
+  }
+
   getCurrentPanel() {
     let panel = <LoginPanel onLoginSuccess={this.handleLoginSuccess} />
 
@@ -132,6 +130,7 @@ export default class PlaylistManager extends React.Component {
       panel = <PlaylistDetailsPanel
         accessToken={this.state.accessToken}
         playlist={this.state.currentPlaylist}
+        onBackToPlaylists={this.handleBackToPlaylists}
         onError={this.handleError}
         onProgressStart={this.handleProgressStart}
         onProgressStop={this.handleProgressStop} />
