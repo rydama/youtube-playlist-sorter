@@ -41,8 +41,20 @@
 }
 
 .back-link {
-  padding-top: 6px;
+  padding-top: 7px;
   font-size: 14px;
+}
+
+.action-row {
+  margin-top: 15px;
+}
+
+.sort-link {
+  margin-left: 15px;
+}
+
+.playlist-items {
+  margin-top: 15px;
 }
 
 .hidden {

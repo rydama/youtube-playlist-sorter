@@ -51,9 +51,12 @@ export default class PlaylistDetailsPanel extends React.Component {
           <div className="col-xs-4">
           </div>
         </div>
-        <div>
-          <button className="btn btn-info" onClick={() => this.handleSortClicked(false)}>A-Z</button>
-          <button className="btn btn-info" onClick={() => this.handleSortClicked(true)}>Z-A</button>
+        <div className="action-row">
+          <span>Sort: </span>
+          <a href="#" className="sort-link" onClick={() => this.handleSortClicked(false)}>A-Z</a>
+          <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
+        </div>
+        <div className="playlist-items">
           <ul>{items}</ul>
         </div>
       </div>
