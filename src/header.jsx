@@ -7,8 +7,8 @@ export default function Header(props) {
         <div className="col-xs-3 header-title">
           Playlist Manager
         </div>
-        <div className="col-xs-6 center-text header-status-text">
-          {props.statusMessage}
+        <div className="col-xs-6 center-text header-status-text"
+             dangerouslySetInnerHTML={{__html: props.statusMessage}}>
         </div>
         <div className="col-xs-3">
           <button className="btn btn-info pull-right header-logout" onClick={() => props.onLogout()}>Logout</button>

@@ -42,8 +42,8 @@ export default class PlaylistDetailsPanel extends React.Component {
     return(
       <div className="content-panel container">
         <div className="row">
-          <div className="col-xs-4">
-            <a href="#" onClick={() => this.props.onBackToPlaylists()}>Back to Playlists</a>
+          <div className="col-xs-4 back-link">
+            <a href="#" onClick={() => this.props.onBackToPlaylists()}>&larr; Back to Playlists</a>
           </div>
           <div className="col-xs-4 playlist-title center-text">
             {this.props.playlist.snippet.title} {videoCountText}
@@ -184,7 +184,8 @@ export default class PlaylistDetailsPanel extends React.Component {
       body: JSON.stringify(playlistItem)
     }
 
-    this.props.onProgressStart(`Sorting video ${playlistItem.snippet.title}...`)
+    let progress = `Sorting video ${playlistItem.snippet.title}`
+    this.props.onProgressStart(progress.substr(0, 50) + "...")
 
     return fetch(url, options).then((response) => {
       if (!response.ok) {
@@ -203,7 +204,8 @@ export default class PlaylistDetailsPanel extends React.Component {
       if (error.errors && error.errors.length > 0) {
         if (error.errors[0].reason == "manualSortRequired") {
           let url = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
-          return `You must first change the playlist settings ordering to Manual at ${url}`
+          let playlistLink = `<a href="${url}" target="_blank">${url}</a>`
+          return `You must first change the playlist settings ordering to Manual at ${playlistLink}`
         }
       }
 
