@@ -8,8 +8,7 @@ export default class PlaylistDetailsPanel extends React.Component {
     this.handleSortClicked = this.handleSortClicked.bind(this)
 
     this.state = {
-      playlistItems: [],
-      playlistsLoaded: false
+      playlistItems: []
     }
   }
 
@@ -32,12 +31,8 @@ export default class PlaylistDetailsPanel extends React.Component {
       </li>
     )
 
-    let videoCountText = ""
-    if (this.state.playlistsLoaded) {
-      videoCountText = this.state.playlistItems.length == 1 ?
-      "(1 video)" :
-      `(${this.state.playlistItems.length} videos)`
-    }
+    let itemCount = this.props.itemCount
+    let videoCountText = `(${itemCount} ${itemCount == 1 ? "video" : "videos"})`
 
     return(
       <div className="content-panel container">
@@ -96,8 +91,7 @@ export default class PlaylistDetailsPanel extends React.Component {
         this.props.onError(`Error retrieving playlist details: ${error}`)
       } else {
         this.setState({
-          playlistItems: playlistItems,
-          playlistsLoaded: true
+          playlistItems: playlistItems
         })
 
         this.props.onProgressStop()

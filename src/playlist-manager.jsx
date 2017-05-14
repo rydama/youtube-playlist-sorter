@@ -25,6 +25,7 @@ export default class PlaylistManager extends React.Component {
       accessToken: null,
       currentPanelId: loginPanelId,
       currentPlaylist: null,
+      currentPlaylistItemCount: 0,
       loginError: null,
       progressMessage: null,
       width: 0,
@@ -58,9 +59,10 @@ export default class PlaylistManager extends React.Component {
     })
   }
 
-  handlePlaylistSelected(playlist) {
+  handlePlaylistSelected(playlist, itemCount) {
     this.setState({
       currentPlaylist: playlist,
+      currentPlaylistItemCount: itemCount,
       currentPanelId: playlistDetailsPanelId
     })
   }
@@ -130,6 +132,7 @@ export default class PlaylistManager extends React.Component {
       panel = <PlaylistDetailsPanel
         accessToken={this.state.accessToken}
         playlist={this.state.currentPlaylist}
+        itemCount={this.state.currentPlaylistItemCount}
         onBackToPlaylists={this.handleBackToPlaylists}
         onError={this.handleError}
         onProgressStart={this.handleProgressStart}
