@@ -57,6 +57,48 @@
   margin-top: 15px;
 }
 
+.playlist-list {
+  margin-top: 5px;
+  margin-left: -40px;
+  margin-right: 10px;
+}
+
+.playlist-list li {
+  list-style: none;
+  border-top: 1px solid #dfdfdf;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.playlist-list li:first-child {
+  border-top: none;
+  padding-top: 0px;
+}
+
+.playlist {
+  position: relative;
+}
+
+.playlist img {
+  display: inline-block;
+}
+
+.playlist .info {
+  display: inline-block;
+  position: absolute;
+  top: 20px;
+  margin-left: 10px;
+}
+
+.playlist .title {
+  font-size: 22px;
+  color: #444;
+}
+
+.playlist .video-count {
+  color: #888;
+}
+
 .hidden {
   display: none;
 }

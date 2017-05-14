@@ -23,7 +23,7 @@ export default class PlaylistPanel extends React.Component {
 
     return(
       <div className="content-panel container">
-        <ul>{playlistLinks}</ul>
+        <ul className="playlist-list">{playlistLinks}</ul>
       </div>
     )
   }
