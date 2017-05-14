@@ -33,6 +33,7 @@ export default class PlaylistDetailsPanel extends React.Component {
 
     let itemCount = this.props.itemCount
     let videoCountText = `(${itemCount} ${itemCount == 1 ? "video" : "videos"})`
+    let playlistUrl = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
 
     return(
       <div className="content-panel container">
@@ -47,6 +48,10 @@ export default class PlaylistDetailsPanel extends React.Component {
           </div>
         </div>
         <div className="action-row">
+          <div>
+          <a href={playlistUrl} target="_blank">Go to this playlist on YouTube</a>
+          </div>
+
           <span>Sort: </span>
           <a href="#" className="sort-link" onClick={() => this.handleSortClicked(false)}>A-Z</a>
           <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
