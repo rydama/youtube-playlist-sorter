@@ -66,45 +66,50 @@
   margin-top: 15px;
 }
 
-.playlist-list {
+.item-list {
   margin-top: 5px;
   margin-left: -40px;
   margin-right: 10px;
 }
 
-.playlist-list li {
+.item-list li {
   list-style: none;
   border-top: 1px solid #dfdfdf;
   padding-top: 15px;
   padding-bottom: 15px;
 }
 
-.playlist-list li:first-child {
+.item-list li:first-child {
   border-top: none;
   padding-top: 0px;
 }
 
-.playlist {
+.item {
   position: relative;
 }
 
-.playlist img {
+.item img {
   display: inline-block;
+  width: 90px;
 }
 
-.playlist .info {
+.item .info {
   display: inline-block;
   position: absolute;
-  top: 20px;
+  top: 6px;
   margin-left: 10px;
 }
 
-.playlist .title {
+.video-item .info {
+  top: 15px;
+}
+
+.item .title {
   font-size: 22px;
   color: #444;
 }
 
-.playlist .video-count {
+.item .video-count {
   color: #888;
 }
 

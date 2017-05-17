@@ -6,7 +6,7 @@ export default function PlaylistLink(props) {
 
   return(
     <li>
-      <div className="playlist">
+      <div className="item">
           <a href="#" onClick={() => props.onPlaylistSelected(props.playlist, itemCount)}>
           <img src={props.playlist.snippet.thumbnails.default.url} />
           <div className="info">

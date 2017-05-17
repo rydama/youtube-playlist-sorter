@@ -27,7 +27,12 @@ export default class PlaylistDetailsPanel extends React.Component {
   render() {
     let items = this.state.playlistItems.map((playlistItem) =>
       <li key={playlistItem.id}>
-        <p>{playlistItem.snippet.position} {playlistItem.snippet.title}</p>
+        <div className="item video-item">
+          <img src={playlistItem.snippet.thumbnails.default.url} />
+          <div className="info">
+            <div className="title">{playlistItem.snippet.title}</div>
+          </div>
+        </div>
       </li>
     )
 
@@ -54,7 +59,7 @@ export default class PlaylistDetailsPanel extends React.Component {
           <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
         </div>
         <div className="playlist-items">
-          <ul>{items}</ul>
+          <ul className="item-list">{items}</ul>
         </div>
       </div>
     )
@@ -203,8 +208,8 @@ export default class PlaylistDetailsPanel extends React.Component {
       if (error.errors && error.errors.length > 0) {
         if (error.errors[0].reason == "manualSortRequired") {
           let url = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
-          let playlistLink = `<a href="${url}" target="_blank">${url}</a>`
-          return `You must first change the playlist settings ordering to Manual at ${playlistLink}`
+          let playlistLink = `<a href="${url}" target="_blank">here</a>`
+          return `You must first change the playlist settings to manual ordering ${playlistLink}.`
         }
       }
 
