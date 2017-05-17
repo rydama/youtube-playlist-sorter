@@ -28,10 +28,12 @@ export default class PlaylistDetailsPanel extends React.Component {
     let items = this.state.playlistItems.map((playlistItem) =>
       <li key={playlistItem.id}>
         <div className="item video-item">
-          <img src={playlistItem.snippet.thumbnails.default.url} />
-          <div className="info">
-            <div className="title">{playlistItem.snippet.title}</div>
-          </div>
+          <a href={`https://www.youtube.com/watch?v=${playlistItem.snippet.resourceId.videoId}`} target="_blank">
+            <img src={playlistItem.snippet.thumbnails.default.url} />
+            <div className="info">
+              <div className="title">{playlistItem.snippet.title}</div>
+            </div>
+          </a>
         </div>
       </li>
     )

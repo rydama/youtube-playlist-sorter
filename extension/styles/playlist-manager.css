@@ -88,6 +88,10 @@
   position: relative;
 }
 
+.item:hover {
+  background-color: #eaf7fb;
+}
+
 .item img {
   display: inline-block;
   width: 90px;
