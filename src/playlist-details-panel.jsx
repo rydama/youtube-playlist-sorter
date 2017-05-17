@@ -44,14 +44,11 @@ export default class PlaylistDetailsPanel extends React.Component {
           <div className="col-xs-4 playlist-title center-text">
             {this.props.playlist.snippet.title} {videoCountText}
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-4 youtube-nav-link">
+            <a className="pull-right" href={playlistUrl} target="_blank">Go to this playlist on YouTube</a>
           </div>
         </div>
         <div className="action-row">
-          <div>
-          <a href={playlistUrl} target="_blank">Go to this playlist on YouTube</a>
-          </div>
-
           <span>Sort: </span>
           <a href="#" className="sort-link" onClick={() => this.handleSortClicked(false)}>A-Z</a>
           <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
