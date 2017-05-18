@@ -56,6 +56,26 @@
 
 .action-row {
   margin-top: 15px;
+  height: 30px;
+}
+
+.action-row div {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.sort-progress-bar {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  top: 2px;
+  margin-left: 15px;
+}
+
+.sort-video-title {
+  display: inline-block;
+  margin-left: 6px;
 }
 
 .sort-link {
@@ -115,14 +135,6 @@
 
 .item .video-count {
   color: #888;
-}
-
-.sort-progress-bar {
-  position: relative;
-  display: inline-block;
-  width: 16px;
-  top: 3px;
-  margin-left: 15px;
 }
 
 .hidden {

@@ -9,7 +9,8 @@ export default class PlaylistDetailsPanel extends React.Component {
 
     this.state = {
       playlistItems: [],
-      percentComplete: 100
+      percentComplete: 100,
+      currentlySortingVideoTitle: ""
     }
   }
 
@@ -54,11 +55,16 @@ export default class PlaylistDetailsPanel extends React.Component {
           </div>
         </div>
         <div className="action-row">
-          <span>Sort: </span>
-          <a href="#" className="sort-link" onClick={() => this.handleSortClicked(false)}>A-Z</a>
-          <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
+          <div>Sort: </div>
+          <div>
+            <a href="#" className="sort-link" onClick={() => this.handleSortClicked(false)}>A-Z</a>
+            <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
+          </div>
           <div className="sort-progress-bar">
             {progressCircle}
+          </div>
+          <div className="sort-video-title">
+            {this.state.currentlySortingVideoTitle}
           </div>
         </div>
         <div className="playlist-items">
@@ -89,7 +95,8 @@ export default class PlaylistDetailsPanel extends React.Component {
     .then(() => {
       this.props.onProgressStop()
       this.setState({
-        percentComplete: 100
+        percentComplete: 100,
+        currentlySortingVideoTitle: ""
       })
     })
   }
@@ -173,7 +180,12 @@ export default class PlaylistDetailsPanel extends React.Component {
 
   updatePlaylistItems(itemsRemaining) {
     this.updatePercentComplete(itemsRemaining)
+
     let toUpdate = itemsRemaining.shift()
+    this.setState({
+      currentlySortingVideoTitle: toUpdate.snippet.title
+    })
+
     return this.updatePlaylistItem(toUpdate).then(() => {
       if (itemsRemaining.length > 0) {
         return this.updatePlaylistItems(itemsRemaining)
@@ -202,9 +214,6 @@ export default class PlaylistDetailsPanel extends React.Component {
       },
       body: JSON.stringify(playlistItem)
     }
-
-    let progress = `Sorting video ${playlistItem.snippet.title}`
-    this.props.onProgressStart(progress.substr(0, 50) + "...")
 
     return fetch(url, options).then((response) => {
       if (!response.ok) {
