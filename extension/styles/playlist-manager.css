@@ -117,6 +117,14 @@
   color: #888;
 }
 
+.sort-progress-bar {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  top: 3px;
+  margin-left: 15px;
+}
+
 .hidden {
   display: none;
 }

@@ -1,27 +1,21 @@
 import React from "react"
+import CircularProgressbar from 'react-circular-progressbar';
 
 export default class PlaylistDetailsPanel extends React.Component {
   constructor(props) {
     super(props)
 
-    this.requestInProgress = false
     this.handleSortClicked = this.handleSortClicked.bind(this)
 
     this.state = {
-      playlistItems: []
+      playlistItems: [],
+      percentComplete: 100
     }
   }
 
   componentDidMount() {
     this.props.onProgressStart("Loading videos...")
     this.loadPlaylistItems()
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    // We get an update when we start our sort request because we
-    // call this.props.onProgressStart(...).
-    // Prevent his update.
-    return !this.requestInProgress
   }
 
   render() {
@@ -41,6 +35,10 @@ export default class PlaylistDetailsPanel extends React.Component {
     let itemCount = this.props.itemCount
     let videoCountText = `(${itemCount} ${itemCount == 1 ? "video" : "videos"})`
     let playlistUrl = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
+    let progressCircle = null
+    if (this.state.percentComplete != 100) {
+      progressCircle = <CircularProgressbar percentage={this.state.percentComplete} textForPercentage={(pct) => ""} />
+    }
 
     return(
       <div className="content-panel container">
@@ -59,6 +57,9 @@ export default class PlaylistDetailsPanel extends React.Component {
           <span>Sort: </span>
           <a href="#" className="sort-link" onClick={() => this.handleSortClicked(false)}>A-Z</a>
           <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
+          <div className="sort-progress-bar">
+            {progressCircle}
+          </div>
         </div>
         <div className="playlist-items">
           <ul className="item-list">{items}</ul>
@@ -68,19 +69,18 @@ export default class PlaylistDetailsPanel extends React.Component {
   }
 
   handleSortClicked(isDescending) {
-    this.requestInProgress = true
     this.props.onProgressStart("Sorting videos...")
 
-    let playlistItems = this.sortPlaylistItems(this.state.playlistItems, isDescending)
+    let itemsCopy = Array.from(this.state.playlistItems)
+    itemsCopy = this.sortPlaylistItems(itemsCopy, isDescending)
 
-    for (let [index, playlistItem] of playlistItems.entries()) {
+    for (let [index, playlistItem] of itemsCopy.entries()) {
       playlistItem.snippet.position = index
     }
 
-    this.updatePlaylistItems(Array.from(playlistItems)).then(() => {
-      this.requestInProgress = false
+    this.updatePlaylistItems(Array.from(itemsCopy)).then(() => {
       this.setState({
-        playlistItems: playlistItems
+        playlistItems: itemsCopy
       })
     })
     .catch((error) => {
@@ -88,7 +88,9 @@ export default class PlaylistDetailsPanel extends React.Component {
     })
     .then(() => {
       this.props.onProgressStop()
-      this.requestInProgress = false
+      this.setState({
+        percentComplete: 100
+      })
     })
   }
 
@@ -170,11 +172,22 @@ export default class PlaylistDetailsPanel extends React.Component {
   }
 
   updatePlaylistItems(itemsRemaining) {
+    this.updatePercentComplete(itemsRemaining)
     let toUpdate = itemsRemaining.shift()
     return this.updatePlaylistItem(toUpdate).then(() => {
       if (itemsRemaining.length > 0) {
         return this.updatePlaylistItems(itemsRemaining)
       }
+    })
+  }
+
+  updatePercentComplete(itemsRemaining) {
+    let complete = this.state.playlistItems.length - itemsRemaining.length
+    console.log(complete)
+    let percentComplete = Math.floor(complete / this.state.playlistItems.length * 100)
+    console.log(percentComplete)
+    this.setState({
+      percentComplete: percentComplete
     })
   }
 
