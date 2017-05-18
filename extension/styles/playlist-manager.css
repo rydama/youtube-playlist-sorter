@@ -67,14 +67,12 @@
 
 .sort-progress-bar {
   position: relative;
-  display: inline-block;
-  width: 16px;
   top: 2px;
   margin-left: 15px;
+  width: 16px;
 }
 
 .sort-video-title {
-  display: inline-block;
   margin-left: 6px;
 }
 
