@@ -1,7 +1,7 @@
 import React from "react"
 
 const clientId = "728451052888-9pc51r3cra9fo6fp3spuq7h22oi5mtgd.apps.googleusercontent.com"
-const redirectUri = "http://localhost/playlist-manager/oauth-callback"
+const redirectUri = "http://localhost/playlist-sorter/oauth-callback"
 const scope = "https://www.googleapis.com/auth/youtube"
 
 export default class LoginPanel extends React.Component {
@@ -39,7 +39,7 @@ export default class LoginPanel extends React.Component {
         <div className="login">
           <div className="row">
             <div className="col-md-12">
-              <h1>YouTube Playlist Manager</h1>
+              <h1>YouTube Playlist Sorter</h1>
             </div>
           </div>
 
@@ -94,7 +94,7 @@ export default class LoginPanel extends React.Component {
 
   handleOauthCallback(url) {
     // Expecting something like:
-    // http://localhost/playlist-manager/oauth-callback#access_token=ya29.CiqvkQSLDvp28N_w&token_type=Bearer&expires_in=3600
+    // http://localhost/playlist-sorter/oauth-callback#access_token=ya29.CiqvkQSLDvp28N_w&token_type=Bearer&expires_in=3600
 
     if (url.startsWith(redirectUri)) {
       let accessTokenParam = "access_token="

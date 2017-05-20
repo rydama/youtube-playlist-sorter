@@ -8,7 +8,7 @@ const loginPanelId = "login"
 const playlistPanelId = "playlist"
 const playlistDetailsPanelId = "playlist-details"
 
-export default class PlaylistManager extends React.Component {
+export default class PlaylistSorter extends React.Component {
   constructor() {
     super()
 
@@ -45,7 +45,7 @@ export default class PlaylistManager extends React.Component {
 
   render() {
     return(
-      <div className="playlist-manager" style={{ width: this.state.width, height: this.state.height }}>
+      <div className="playlist-sorter" style={{ width: this.state.width, height: this.state.height }}>
         {this.getHeader()}
         {this.getCurrentPanel()}
       </div>

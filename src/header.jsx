@@ -5,7 +5,7 @@ export default function Header(props) {
     <div className="header container">
       <div className="row header-row">
         <div className="col-xs-3 header-title">
-          Playlist Manager
+          Playlist Sorter
         </div>
         <div className="col-xs-6 center-text header-status-text"
              dangerouslySetInnerHTML={{__html: props.statusMessage}}>

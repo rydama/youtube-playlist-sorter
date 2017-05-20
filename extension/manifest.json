@@ -1,7 +1,7 @@
 {
-  "name": "YouTube Playlist Manager",
+  "name": "YouTube Playlist Sorter",
   "version": "0.0.2",
-  "description": "Manage YouTube playlists",
+  "description": "Sort YouTube playlists",
   "icons": {
     "16": "images/icon16.png",
     "32": "images/icon32.png",

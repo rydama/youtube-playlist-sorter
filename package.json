@@ -1,6 +1,6 @@
 {
-  "name": "youtube-playlist-manager",
-  "description": "Manage YouTube playlists",
+  "name": "youtube-playlist-sorter",
+  "description": "Sort YouTube playlists",
   "repository": {
     "type": "git"
   },

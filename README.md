@@ -1,6 +1,5 @@
-# YouTube Playlist Manager
+# YouTube Playlist Sorter
 
 ## TODO
 
-- Use promises instead of callbacks
  
