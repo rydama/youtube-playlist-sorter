@@ -1,3 +1,4 @@
+extension.zip
 node_modules
 extension/bundle.js
 extension/background.js
