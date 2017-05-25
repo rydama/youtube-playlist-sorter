@@ -39,7 +39,7 @@ export default class LoginPanel extends React.Component {
         <div className="login">
           <div className="row">
             <div className="col-md-12">
-              <h1>YouTube Playlist Sorter</h1>
+              <h1>Playlist Sorter for YouTube&trade;</h1>
             </div>
           </div>
 

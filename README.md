@@ -1,4 +1,4 @@
-# YouTube Playlist Sorter
+# Playlist Sorter for YouTube
 
 ## TODO
 
