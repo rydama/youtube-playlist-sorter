@@ -75,7 +75,7 @@ export default class LoginPanel extends React.Component {
       "&response_type=token"
 
     let width = 600
-    let height = 400
+    let height = 600
     let left = (screen.width/2) - (width/2)
     let top = (screen.height/2) - (height/2)
 
@@ -83,8 +83,8 @@ export default class LoginPanel extends React.Component {
       "url": authUrl,
       "width": width,
       "height": height,
-      "left": left,
-      "top": top,
+      "left": Math.round(left),
+      "top": Math.round(top),
       "type": "popup"
     }
 
