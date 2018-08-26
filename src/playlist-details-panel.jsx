@@ -8,7 +8,7 @@ export default class PlaylistDetailsPanel extends React.Component {
     this.handleSortClicked = this.handleSortClicked.bind(this)
 
     this.state = {
-      playlistItems: [],
+      playlistItems: null,
       percentComplete: 100,
       currentlySortingVideoTitle: ""
     }
@@ -20,21 +20,31 @@ export default class PlaylistDetailsPanel extends React.Component {
   }
 
   render() {
-    let items = this.state.playlistItems.map((playlistItem) =>
-      <li key={playlistItem.id}>
-        <div className="item video-item">
-          <a href={`https://www.youtube.com/watch?v=${playlistItem.snippet.resourceId.videoId}`} target="_blank">
-            <img src={playlistItem.snippet.thumbnails.default.url} />
-            <div className="info">
-              <div className="title">{playlistItem.snippet.title}</div>
-            </div>
-          </a>
-        </div>
-      </li>
-    )
+    let videoCountText = ""
+    let items = []
 
-    let itemCount = this.props.itemCount
-    let videoCountText = `(${itemCount} ${itemCount == 1 ? "video" : "videos"})`
+    if (this.state.playlistItems) {
+      items = this.state.playlistItems.map((playlistItem) =>
+        <li key={playlistItem.id}>
+          <div className="item video-item">
+            <a href={`https://www.youtube.com/watch?v=${playlistItem.snippet.resourceId.videoId}`} target="_blank">
+              <img src={playlistItem.snippet.thumbnails.default.url} />
+              <div className="info">
+                <div className="title">{playlistItem.snippet.title}</div>
+              </div>
+            </a>
+          </div>
+        </li>
+      )
+
+
+      let itemCount = this.props.itemCount
+      let validItemCount = this.state.playlistItems.length
+      let deletedCount = itemCount - validItemCount
+      let deletedText = deletedCount > 0 ? `, ignoring ${deletedCount} deleted` : ""
+      videoCountText = `(${validItemCount} ${validItemCount == 1 ? "video" : "videos"}${deletedText})`
+    }
+
     let playlistUrl = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
     let progressCircle = null
     if (this.state.percentComplete != 100) {
