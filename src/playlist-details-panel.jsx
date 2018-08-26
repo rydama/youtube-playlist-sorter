@@ -139,7 +139,11 @@ export default class PlaylistDetailsPanel extends React.Component {
 
         response.json().then((data) => {
           for(let playlistItem of data.items) {
-            playlistItems.push(playlistItem)
+            // Playlists can contain videos that have since been deleted. We want to omit
+            // these items. The only way I can see to determine this is if thumbnails is undefined.
+            if (playlistItem.snippet.thumbnails) {
+              playlistItems.push(playlistItem)
+            }
           }
 
           if (data.nextPageToken) {
@@ -195,9 +199,7 @@ export default class PlaylistDetailsPanel extends React.Component {
 
   updatePercentComplete(itemsRemaining) {
     let complete = this.state.playlistItems.length - itemsRemaining.length
-    console.log(complete)
     let percentComplete = Math.floor(complete / this.state.playlistItems.length * 100)
-    console.log(percentComplete)
     this.setState({
       percentComplete: percentComplete
     })
