@@ -29,7 +29,7 @@ To make YouTube work for me, I needed to be able to order by video name. This ex
 
 First, install dependencies and build:
 - `npm install`
-- `./build.sh`
+- `npm run watch` (this will build and watch for source changes)
 
 ### Loading the extension locally
 
@@ -41,8 +41,9 @@ First, install dependencies and build:
 
 After making changes, you'll need to:
 
-1. Click the reload icon for the extension in chrome://extensions. This will close the Playlist Sorter page.
-2. Click the Playlist Sorter icon in the Chrome extension toolbar area to reopen it
+1. Monitor the `npm run watch` output in the terminal to be sure your changes built cleanly
+2. Click the reload icon for the extension in chrome://extensions. This will close the Playlist Sorter page.
+3. Click the Playlist Sorter icon in the Chrome extension toolbar area to reopen it
 
 ### Extension code
 
@@ -58,6 +59,6 @@ Open devtools on the Playlist Sorter app tab.
 
 ### Building a new version
 
-- Be sure to update version in `manifest.json`
+- Be sure to update the version in `manifest.json`
 - Run ./build.sh to create a new extension.zip in the current directory
 - Upload the new zip to the Chrome store
