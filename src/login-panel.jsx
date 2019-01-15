@@ -89,8 +89,7 @@ class LoginPanel extends React.Component {
       "type": "popup"
     }
 
-    chrome.windows.create(options, function() {
-    })
+    chrome.windows.create(options, () => {})
   }
 
   handleOauthCallback(url) {
@@ -122,19 +121,17 @@ class LoginPanel extends React.Component {
     let url = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`
 
     fetch(url)
-      .then(function(response) {
+      .then((response) => {
         if (response.status != 200) {
           callback(false)
           return
         }
 
-        response.json().then(function(data) {
+        response.json().then((data) => {
           callback(data.audience == clientId ? null : "Mismatched client ID")
         })
       })
-      .catch(function(error) {
-        callback(error)
-      })
+      .catch((error) => callback(error))
   }
 }
 

@@ -162,9 +162,7 @@ class PlaylistDetailsPanel extends React.Component {
           }
         })
       })
-      .catch(function(error) {
-        callback(error)
-      })
+      .catch((error) => callback(error))
   }
 
   sortPlaylistItems(playlistItems, isDescending) {
