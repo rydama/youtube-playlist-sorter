@@ -53,6 +53,9 @@ The extension code is found in the `src` directory.
 - `background.js` This code runs whenever the extension is loaded. It listens for our extension button being clicked and creates a new tab for our UI.
 - `*.jsx` React components for the app.
 
+### ES Lint
+- `npm run lint`
+
 ### Debugging
 
 Open devtools on the Playlist Sorter app tab.
