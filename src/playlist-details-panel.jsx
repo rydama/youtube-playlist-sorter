@@ -1,7 +1,8 @@
 import React from "react"
-import CircularProgressbar from 'react-circular-progressbar';
+import PropTypes from "prop-types"
+import CircularProgressbar from "react-circular-progressbar"
 
-export default class PlaylistDetailsPanel extends React.Component {
+class PlaylistDetailsPanel extends React.Component {
   constructor(props) {
     super(props)
 
@@ -48,7 +49,7 @@ export default class PlaylistDetailsPanel extends React.Component {
     let playlistUrl = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
     let progressCircle = null
     if (this.state.percentComplete != 100) {
-      progressCircle = <CircularProgressbar percentage={this.state.percentComplete} textForPercentage={(pct) => ""} />
+      progressCircle = <CircularProgressbar percentage={this.state.percentComplete} textForPercentage={() => ""} />
     }
 
     return(
@@ -98,11 +99,9 @@ export default class PlaylistDetailsPanel extends React.Component {
       this.setState({
         playlistItems: itemsCopy
       })
-    })
-    .catch((error) => {
+    }).catch((error) => {
       this.props.onError(error.message)
-    })
-    .then(() => {
+    }).then(() => {
       this.props.onProgressStop()
       this.setState({
         percentComplete: 100,
@@ -219,7 +218,7 @@ export default class PlaylistDetailsPanel extends React.Component {
     let url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet"
 
     let options = {
-      method: 'put',
+      method: "put",
       headers: {
         "Authorization": "Bearer " + this.props.accessToken,
         "Content-Type": "application/json"
@@ -252,6 +251,18 @@ export default class PlaylistDetailsPanel extends React.Component {
       return `${error.code}: ${error.message}`
     }
 
-    return null;
+    return null
   }
 }
+
+PlaylistDetailsPanel.propTypes = {
+  accessToken: PropTypes.string.isRequired,
+  playlist: PropTypes.object.isRequired,
+  itemCount: PropTypes.number.isRequired,
+  onProgressStart: PropTypes.func.isRequired,
+  onProgressStop: PropTypes.func.isRequired,
+  onBackToPlaylists: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired
+}
+
+export default PlaylistDetailsPanel

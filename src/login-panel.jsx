@@ -1,10 +1,11 @@
 import React from "react"
+import PropTypes from "prop-types"
 
 const clientId = "728451052888-9pc51r3cra9fo6fp3spuq7h22oi5mtgd.apps.googleusercontent.com"
 const redirectUri = "http://localhost/playlist-sorter/oauth-callback"
 const scope = "https://www.googleapis.com/auth/youtube"
 
-export default class LoginPanel extends React.Component {
+class LoginPanel extends React.Component {
   constructor(props) {
     super(props)
     this.handleLoginClicked = this.handleLoginClicked.bind(this)
@@ -27,10 +28,10 @@ export default class LoginPanel extends React.Component {
 
   render() {
     let errorDiv = <div/>
-    if (this.props.loginError) {
+    if (this.state.loginError) {
       errorDiv =
-        <div class={this.props.loginError ? "" : "hidden" }>
-          Login failed: {this.props.loginError}
+        <div class={this.state.loginError ? "" : "hidden" }>
+          Login failed: {this.state.loginError}
         </div>
     }
 
@@ -88,7 +89,7 @@ export default class LoginPanel extends React.Component {
       "type": "popup"
     }
 
-    chrome.windows.create(options, function(window) {
+    chrome.windows.create(options, function() {
     })
   }
 
@@ -136,3 +137,9 @@ export default class LoginPanel extends React.Component {
       })
   }
 }
+
+LoginPanel.propTypes = {
+  onLoginSuccess: PropTypes.func.isRequired
+}
+
+export default LoginPanel

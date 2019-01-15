@@ -88,7 +88,7 @@ export default class PlaylistSorter extends React.Component {
 
   handleLogout() {
     this.revokeToken(this.state.accessToken).catch((error) => {
-      console.log("Could not revoke token:", error.message)
+      console.log("Could not revoke token:", error.message) // eslint-disable-line no-console
     })
 
     this.setState({

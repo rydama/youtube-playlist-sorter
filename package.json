@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint src/*.js src/*.jsx",
     "build": "npm run build:bundle && npm run build:background && npm run copy-css",
     "build:bundle": "browserify src/app.js --extension=.jsx -o extension/bundle.js -d -t [ babelify --presets [ es2015 react ] ]",
     "build:background": "browserify src/background.js -o extension/background.js -t [ babelify --presets [ es2015 react ] ]",
@@ -28,6 +28,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "jquery": "^3.2.1",
+    "prop-types": "^15.6.2",
     "react": "^16.7.0",
     "react-circular-progressbar": "^1.0.0",
     "react-dom": "^16.7.0"

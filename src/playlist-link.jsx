@@ -1,6 +1,7 @@
 import React from "react"
+import PropTypes from "prop-types"
 
-export default function PlaylistLink(props) {
+const PlaylistLink = (props) => {
   let itemCount = props.playlist.contentDetails.itemCount
   let videoCountText = `${itemCount} ${itemCount == 1 ? "video" : "videos"}`
 
@@ -18,3 +19,10 @@ export default function PlaylistLink(props) {
     </li>
   )
 }
+
+PlaylistLink.propTypes = {
+  playlist: PropTypes.object.isRequired,
+  onPlaylistSelected: PropTypes.func.isRequired
+}
+
+export default PlaylistLink

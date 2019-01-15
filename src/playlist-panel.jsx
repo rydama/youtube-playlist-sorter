@@ -1,7 +1,8 @@
 import React from "react"
+import PropTypes from "prop-types"
 import PlaylistLink from "./playlist-link"
 
-export default class PlaylistPanel extends React.Component {
+class PlaylistPanel extends React.Component {
 
   constructor(props) {
     super(props)
@@ -95,3 +96,13 @@ export default class PlaylistPanel extends React.Component {
     return playlists
   }
 }
+
+PlaylistPanel.propTypes = {
+  accessToken: PropTypes.string.isRequired,
+  onProgressStart: PropTypes.func.isRequired,
+  onProgressStop: PropTypes.func.isRequired,
+  onPlaylistSelected: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired
+}
+
+export default PlaylistPanel
