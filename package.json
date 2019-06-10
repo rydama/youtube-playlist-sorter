@@ -4,7 +4,7 @@
   "repository": {
     "type": "git"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "lint": "eslint src/*.js src/*.jsx",
