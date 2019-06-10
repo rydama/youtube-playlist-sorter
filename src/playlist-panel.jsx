@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import PlaylistLink from "./playlist-link"
-import { orderBy } from 'natural-orderby';
+import { orderBy } from "natural-orderby"
 
 class PlaylistPanel extends React.Component {
 

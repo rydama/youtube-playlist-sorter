@@ -17,6 +17,7 @@
     "copy-css": "cp node_modules/bootstrap/dist/css/bootstrap*.min.css extension/styles"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
     "babelify": "^7.3.0",

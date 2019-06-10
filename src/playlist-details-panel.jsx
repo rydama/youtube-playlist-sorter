@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import CircularProgressbar from "react-circular-progressbar"
-import { orderBy } from 'natural-orderby';
+import { orderBy } from "natural-orderby"
 
 class PlaylistDetailsPanel extends React.Component {
   constructor(props) {
