@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import PlaylistLink from "./playlist-link"
-import numericalSort from "./numerical-sort"
+import { orderBy } from 'natural-orderby';
 
 class PlaylistPanel extends React.Component {
 
@@ -84,8 +84,7 @@ class PlaylistPanel extends React.Component {
   }
 
   sortPlaylists(playlists) {
-    playlists.sort((a, b) => numericalSort(a.snippet.title, b.snippet.title))
-    return playlists
+    return orderBy(playlists, v => v.snippet.title)
   }
 }
 

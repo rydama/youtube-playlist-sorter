@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import CircularProgressbar from "react-circular-progressbar"
-import numericalSort from "./numerical-sort"
+import { orderBy } from 'natural-orderby';
 
 class PlaylistDetailsPanel extends React.Component {
   constructor(props) {
@@ -167,8 +167,7 @@ class PlaylistDetailsPanel extends React.Component {
   }
 
   sortPlaylistItems(playlistItems, isDescending) {
-    playlistItems.sort((a, b) => numericalSort(a.snippet.title, b.snippet.title, isDescending))
-    return playlistItems
+    return orderBy(playlistItems, v => v.snippet.title, isDescending ? "desc" : "asc")
   }
 
   updatePlaylistItems(itemsRemaining) {
