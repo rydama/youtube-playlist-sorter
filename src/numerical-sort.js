@@ -1,4 +1,8 @@
 function numericalSort(a, b, isDescending) {
+  // Do case-insensitive sorting, so abc comes before Abcd.
+  a = a.toLowerCase()
+  b = b.toLowerCase()
+
   // Do the strings both begin with numbers?
   // The goal is to sort 1,2,10... not 1,10,2
   const regex = /^\d+/
