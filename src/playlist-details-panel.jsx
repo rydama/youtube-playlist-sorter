@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import CircularProgressbar from "react-circular-progressbar"
+import numericalSort from "./numerical-sort"
 
 class PlaylistDetailsPanel extends React.Component {
   constructor(props) {
@@ -166,26 +167,7 @@ class PlaylistDetailsPanel extends React.Component {
   }
 
   sortPlaylistItems(playlistItems, isDescending) {
-    playlistItems.sort((a, b) => {
-      if (isDescending) {
-        if (b.snippet.title < a.snippet.title) {
-          return -1
-        }
-        if (b.snippet.title > a.snippet.title) {
-          return 1
-        }
-        return 0
-      } else {
-        if (a.snippet.title < b.snippet.title) {
-          return -1
-        }
-        if (a.snippet.title > b.snippet.title) {
-          return 1
-        }
-        return 0
-      }
-    })
-
+    playlistItems.sort((a, b) => numericalSort(a.snippet.title, b.snippet.title, isDescending))
     return playlistItems
   }
 

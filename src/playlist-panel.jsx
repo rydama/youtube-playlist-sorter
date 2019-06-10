@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import PlaylistLink from "./playlist-link"
+import numericalSort from "./numerical-sort"
 
 class PlaylistPanel extends React.Component {
 
@@ -83,16 +84,7 @@ class PlaylistPanel extends React.Component {
   }
 
   sortPlaylists(playlists) {
-    playlists.sort((a, b) => {
-      if (a.snippet.title < b.snippet.title) {
-        return -1
-      }
-      if (a.snippet.title > b.snippet.title) {
-        return 1
-      }
-      return 0
-    })
-
+    playlists.sort((a, b) => numericalSort(a.snippet.title, b.snippet.title))
     return playlists
   }
 }
