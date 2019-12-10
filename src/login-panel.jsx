@@ -20,10 +20,12 @@ class LoginPanel extends React.Component {
 
   componentDidMount() {
     chrome.webNavigation.onBeforeNavigate.addListener(this.handleBeforeNavigate)
+    chrome.webNavigation.onCompleted.addListener(this.handleBeforeNavigate)
   }
 
   componentWillUnmount() {
     chrome.webNavigation.onBeforeNavigate.removeListener(this.handleBeforeNavigate)
+    chrome.webNavigation.onCompleted.removeListener(this.handleBeforeNavigate)
   }
 
   render() {
@@ -69,7 +71,7 @@ class LoginPanel extends React.Component {
   }
 
   handleLoginClicked() {
-    let authUrl = "https://accounts.google.com/o/oauth2/auth" +
+    let authUrl = "https://accounts.google.com/o/oauth2/v2/auth" +
       "?client_id=" + clientId +
       "&redirect_uri=" + encodeURIComponent(redirectUri) +
       "&scope=" + encodeURIComponent(scope) +
