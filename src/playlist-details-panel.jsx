@@ -53,6 +53,8 @@ class PlaylistDetailsPanel extends React.Component {
       progressCircle = <CircularProgressbar percentage={this.state.percentComplete} textForPercentage={() => ""} />
     }
 
+    const helpText = "note: once sorting is complete, it can take a few minutes before the playlist is fully updated on YouTube"
+
     return(
       <div className="content-panel container">
         <div className="row">
@@ -69,8 +71,9 @@ class PlaylistDetailsPanel extends React.Component {
         <div className="action-row">
           <div>Sort: </div>
           <div>
-            <a href="#" className="sort-link" onClick={() => this.handleSortClicked(false)}>A-Z</a>
-            <a href="#" className="sort-link" onClick={() => this.handleSortClicked(true)}>Z-A</a>
+            <a href="#" className="sort-link" title={helpText} onClick={() => this.handleSortClicked({descending: false})}>A-Z</a>
+            <a href="#" className="sort-link" title={helpText} onClick={() => this.handleSortClicked({descending: true})}>Z-A</a>
+            <a href="#" className="sort-link" title={helpText} onClick={() => this.handleSortClicked({shuffle: true})}>Shuffle</a>
           </div>
           <div className="sort-progress-bar">
             {progressCircle}
@@ -86,11 +89,15 @@ class PlaylistDetailsPanel extends React.Component {
     )
   }
 
-  handleSortClicked(isDescending) {
+  handleSortClicked(options) {
     this.props.onProgressStart("Sorting videos...")
 
     let itemsCopy = Array.from(this.state.playlistItems)
-    itemsCopy = this.sortPlaylistItems(itemsCopy, isDescending)
+    if (options.shuffle) {
+      itemsCopy = this.shufflePlaylistItems(itemsCopy)
+    } else {
+      itemsCopy = this.sortPlaylistItems(itemsCopy, options.descending)
+    }
 
     for (let [index, playlistItem] of itemsCopy.entries()) {
       playlistItem.snippet.position = index
@@ -168,6 +175,15 @@ class PlaylistDetailsPanel extends React.Component {
 
   sortPlaylistItems(playlistItems, isDescending) {
     return orderBy(playlistItems, v => v.snippet.title, isDescending ? "desc" : "asc")
+  }
+
+  shufflePlaylistItems(playlistItems) {
+    for (let i = playlistItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); // semi-colon here to keep eslint no-unexpected-multiline quiet
+      [playlistItems[i], playlistItems[j]] = [playlistItems[j], playlistItems[i]]
+    }
+
+    return playlistItems
   }
 
   updatePlaylistItems(itemsRemaining) {
