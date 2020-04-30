@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "natural-orderby": "^2.0.3",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
