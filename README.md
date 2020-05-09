@@ -27,7 +27,17 @@ To make YouTube work for me, I needed to be able to order by video name. This ex
 
 ## Developing
 
-First, install dependencies and build:
+### OAuth Client ID
+You'll need a google oauth client ID. Client-side-only apps (such as this extension) have a challenge. They can't store the oauth client _secret_. How to oauth without it? Google apis support the "implicit grant flow" for authenticating with the google api without a client secret. It uses only the _client ID_. Details [here](https://developers.google.com/youtube/v3/guides/auth/client-side-web-apps).
+
+Once you have your client ID (not _secret_), create a file called src/client-id.js with these contents: 
+
+```
+const clientId = "874509873532-9pc5ia873dgtw6fp3sp734uq7h98dfx2.apps.googleusercontent.com"
+export default clientId
+```
+
+### Install dependencies and build:
 - `npm install`
 - `npm run watch` (this will build and watch for source changes)
 

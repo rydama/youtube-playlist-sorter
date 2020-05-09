@@ -39,7 +39,6 @@ class PlaylistDetailsPanel extends React.Component {
         </li>
       )
 
-
       let itemCount = this.props.itemCount
       let validItemCount = this.state.playlistItems.length
       let deletedCount = itemCount - validItemCount
@@ -157,8 +156,10 @@ class PlaylistDetailsPanel extends React.Component {
         response.json().then((data) => {
           for(let playlistItem of data.items) {
             // Playlists can contain videos that have since been deleted. We want to omit
-            // these items. The only way I can see to determine this is if thumbnails is undefined.
-            if (playlistItem.snippet.thumbnails) {
+            // these items. The youtube API doesn't seem to indicate this in the playlist item.
+            // The only way I can see to identify a deleted video (without trying to fetch it)
+            // is if thumbnails is undefined or empty.
+            if (playlistItem.snippet.thumbnails && playlistItem.snippet.thumbnails.default) {
               playlistItems.push(playlistItem)
             }
           }

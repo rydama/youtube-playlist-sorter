@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
+import clientId from "./client-id"
 
-const clientId = "728451052888-9pc51r3cra9fo6fp3spuq7h22oi5mtgd.apps.googleusercontent.com"
 const redirectUri = "http://localhost/playlist-sorter/oauth-callback"
 const scope = "https://www.googleapis.com/auth/youtube"
 
