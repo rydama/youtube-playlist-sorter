@@ -210,21 +210,31 @@ class PlaylistDetailsPanel extends React.Component {
   }
 
   updatePlaylistItem(playlistItem) {
-    let url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet"
+    const url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet"
 
-    let options = {
+    // Update only the required properties, plus the new position.
+    const updateItem = {
+      id: playlistItem.id,
+      snippet: {
+        playlistId: playlistItem.snippet.playlistId,
+        resourceId: playlistItem.snippet.resourceId,
+        position: playlistItem.snippet.position
+      }
+    }
+
+    const options = {
       method: "put",
       headers: {
         "Authorization": "Bearer " + this.props.accessToken,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(playlistItem)
+      body: JSON.stringify(updateItem)
     }
 
     return fetch(url, options).then((response) => {
       if (!response.ok) {
         return response.json().then((data) => {
-          let message = this.getErrorMessage(data) || `updating playlistItem: ${response.status}`
+          const message = this.getErrorMessage(data) || `updating playlistItem: ${response.status}`
           throw new Error(message)
         })
       }

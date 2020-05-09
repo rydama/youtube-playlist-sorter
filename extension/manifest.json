@@ -1,6 +1,6 @@
 {
   "name": "Playlist Sorter for YouTube",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "Sort YouTube playlist videos alphabetically by title",
   "icons": {
     "16": "images/icon16.png",
