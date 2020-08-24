@@ -27,6 +27,8 @@ To make YouTube work for me, I needed to be able to order by video name. This ex
 
 ## Developing
 
+If you'd like to develop your own extension based on this one, you can probably clone it, start making changes, and run it locally. However, if you plan to publish anything to the Chrome app store, you'll need to change the name to avoid any confusion with this extension.
+
 ### OAuth Client ID
 You'll need a google oauth client ID. Client-side-only apps (such as this extension) have a challenge. They can't store the oauth client _secret_. How to oauth without it? Google apis support the "implicit grant flow" for authenticating with the google api without a client secret. It uses only the _client ID_. Details [here](https://developers.google.com/youtube/v3/guides/auth/client-side-web-apps).
 
