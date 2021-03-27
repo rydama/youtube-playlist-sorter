@@ -250,7 +250,7 @@ class PlaylistDetailsPanel extends React.Component {
         if (error.errors[0].reason == "manualSortRequired") {
           let url = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
           let playlistLink = `<a href="${url}" target="_blank">here</a>`
-          return `You must first change the playlist settings to manual ordering ${playlistLink}.`
+          return `You must first change the playlist to manual ordering by dragging a video to a different position ${playlistLink}.`
         }
       }
 
