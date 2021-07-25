@@ -24,7 +24,7 @@
     "browserify": "^14.1.0",
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.17.0",
-    "watchify": "^3.11.1"
+    "watchify": "^4.0.0"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
