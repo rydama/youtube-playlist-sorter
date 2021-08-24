@@ -1,29 +1,29 @@
-import React from "react";
-import PropTypes from "prop-types";
-import CircularProgressbar from "react-circular-progressbar";
-import { orderBy } from "natural-orderby";
+import React from "react"
+import PropTypes from "prop-types"
+import CircularProgressbar from "react-circular-progressbar"
+import { orderBy } from "natural-orderby"
 
 class PlaylistDetailsPanel extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.handleSortClicked = this.handleSortClicked.bind(this);
+    this.handleSortClicked = this.handleSortClicked.bind(this)
 
     this.state = {
       playlistItems: null,
       percentComplete: 100,
       currentlySortingVideoTitle: "",
-    };
+    }
   }
 
   componentDidMount() {
-    this.props.onProgressStart("Loading videos...");
-    this.loadPlaylistItems();
+    this.props.onProgressStart("Loading videos...")
+    this.loadPlaylistItems()
   }
 
   render() {
-    let videoCountText = "";
-    let items = [];
+    let videoCountText = ""
+    let items = []
 
     if (this.state.playlistItems) {
       items = this.state.playlistItems.map((playlistItem) => (
@@ -40,31 +40,30 @@ class PlaylistDetailsPanel extends React.Component {
             </a>
           </div>
         </li>
-      ));
+      ))
 
-      let itemCount = this.props.itemCount;
-      let validItemCount = this.state.playlistItems.length;
-      let deletedCount = itemCount - validItemCount;
+      let itemCount = this.props.itemCount
+      let validItemCount = this.state.playlistItems.length
+      let deletedCount = itemCount - validItemCount
       let deletedText =
-        deletedCount > 0 ? `, ignoring ${deletedCount} deleted` : "";
-      videoCountText = `(${validItemCount} ${
-        validItemCount == 1 ? "video" : "videos"
-      }${deletedText})`;
+        deletedCount > 0 ? `, ignoring ${deletedCount} deleted` : ""
+      videoCountText = `(${validItemCount} ${validItemCount == 1 ? "video" : "videos"
+      }${deletedText})`
     }
 
-    let playlistUrl = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`;
-    let progressCircle = null;
+    let playlistUrl = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
+    let progressCircle = null
     if (this.state.percentComplete != 100) {
       progressCircle = (
         <CircularProgressbar
           percentage={this.state.percentComplete}
           textForPercentage={() => ""}
         />
-      );
+      )
     }
 
     const helpText =
-      "note: once sorting is complete, it can take a few minutes before the playlist is fully updated on YouTube";
+      "note: once sorting is complete, it can take a few minutes before the playlist is fully updated on YouTube"
 
     return (
       <div className="content-panel container">
@@ -140,50 +139,50 @@ class PlaylistDetailsPanel extends React.Component {
           <ul className="item-list">{items}</ul>
         </div>
       </div>
-    );
+    )
   }
 
   handleSortClicked(options) {
-    this.props.onProgressStart("Sorting videos...");
+    this.props.onProgressStart("Sorting videos...")
 
-    let itemsCopy = Array.from(this.state.playlistItems);
+    let itemsCopy = Array.from(this.state.playlistItems)
     if (options.shuffle) {
-      itemsCopy = this.shufflePlaylistItems(itemsCopy);
+      itemsCopy = this.shufflePlaylistItems(itemsCopy)
     } else if (
       options.durationDescending === true ||
       options.durationDescending === false
     ) {
       this.sortByDuration(itemsCopy, options.durationDescending).then(
         (i) => (itemsCopy = i)
-      );
+      )
     } else {
-      itemsCopy = this.sortPlaylistItems(itemsCopy, options.descending);
+      itemsCopy = this.sortPlaylistItems(itemsCopy, options.descending)
     }
 
     for (let [index, playlistItem] of itemsCopy.entries()) {
-      playlistItem.snippet.position = index;
+      playlistItem.snippet.position = index
     }
 
     this.updatePlaylistItems(Array.from(itemsCopy))
       .then(() => {
         this.setState({
           playlistItems: itemsCopy,
-        });
+        })
       })
       .catch((error) => {
-        this.props.onError(error.message);
+        this.props.onError(error.message)
       })
       .then(() => {
-        this.props.onProgressStop();
+        this.props.onProgressStop()
         this.setState({
           percentComplete: 100,
           currentlySortingVideoTitle: "",
-        });
-      });
+        })
+      })
   }
 
   loadPlaylistItems() {
-    let playlistItems = [];
+    let playlistItems = []
 
     this.getPlaylistItems(
       null,
@@ -191,48 +190,48 @@ class PlaylistDetailsPanel extends React.Component {
       playlistItems,
       (error) => {
         if (error) {
-          this.props.onError(`Error retrieving playlist details: ${error}`);
+          this.props.onError(`Error retrieving playlist details: ${error}`)
         } else {
           this.setState({
             playlistItems: playlistItems,
-          });
+          })
 
-          this.props.onProgressStop();
+          this.props.onProgressStop()
         }
       }
-    );
+    )
   }
 
   async getVideoContentDetails(videoId) {
-    let url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=contentDetails`;
+    let url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=contentDetails`
     let options = {
       headers: {
         Authorization: "Bearer " + this.props.accessToken,
       },
-    };
-    let result = await fetch(url, options);
-    let result2 = await result.json();
-    return result2.items[0].contentDetails;
+    }
+    let result = await fetch(url, options)
+    let result2 = await result.json()
+    return result2.items[0].contentDetails
   }
 
   getPlaylistItems(pageToken, playlistId, playlistItems, callback) {
-    let url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50`;
+    let url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50`
 
     if (pageToken) {
-      url += "&pageToken=" + pageToken;
+      url += "&pageToken=" + pageToken
     }
 
     let options = {
       headers: {
         Authorization: "Bearer " + this.props.accessToken,
       },
-    };
+    }
 
     fetch(url, options)
       .then((response) => {
         if (response.status != 200) {
-          callback(response.status);
-          return;
+          callback(response.status)
+          return
         }
 
         response.json().then((data) => {
@@ -245,7 +244,7 @@ class PlaylistDetailsPanel extends React.Component {
               playlistItem.snippet.thumbnails &&
               playlistItem.snippet.thumbnails.default
             ) {
-              playlistItems.push(playlistItem);
+              playlistItems.push(playlistItem)
             }
           }
 
@@ -255,13 +254,13 @@ class PlaylistDetailsPanel extends React.Component {
               playlistId,
               playlistItems,
               callback
-            );
+            )
           } else {
-            callback();
+            callback()
           }
-        });
+        })
       })
-      .catch((error) => callback(error));
+      .catch((error) => callback(error))
   }
 
   sortPlaylistItems(playlistItems, isDescending) {
@@ -269,7 +268,7 @@ class PlaylistDetailsPanel extends React.Component {
       playlistItems,
       (v) => v.snippet.title,
       isDescending ? "desc" : "asc"
-    );
+    )
   }
 
   shufflePlaylistItems(playlistItems) {
@@ -278,60 +277,57 @@ class PlaylistDetailsPanel extends React.Component {
       [playlistItems[i], playlistItems[j]] = [
         playlistItems[j],
         playlistItems[i],
-      ];
+      ]
     }
 
-    return playlistItems;
+    return playlistItems
   }
 
   async sortByDuration(playlistItems, isDescending) {
     let promises = playlistItems.map(async (playlistItem) => {
-      let videoId = playlistItem.snippet.resourceId.videoId;
-      let videoContentDetails = await this.getVideoContentDetails(videoId);
+      let videoId = playlistItem.snippet.resourceId.videoId
+      let videoContentDetails = await this.getVideoContentDetails(videoId)
       return {
         playlistItem,
         duration: YTDurationToSeconds(videoContentDetails.duration),
-      };
-    });
-    let videosToSort = await Promise.all(promises);
-    console.log(videosToSort);
-    let sortedVideos = orderBy(
+      }
+    })
+    let videosToSort = await Promise.all(promises)
+    return orderBy(
       videosToSort,
       (v) => v.duration,
       isDescending ? "desc" : "asc"
-    );
-    console.log(sortedVideos);
-    return sortedVideos.map((v) => v.playlistItem);
+    ).map((v) => v.playlistItem)
   }
 
   updatePlaylistItems(itemsRemaining) {
-    this.updatePercentComplete(itemsRemaining);
+    this.updatePercentComplete(itemsRemaining)
 
-    let toUpdate = itemsRemaining.shift();
+    let toUpdate = itemsRemaining.shift()
     this.setState({
       currentlySortingVideoTitle: toUpdate.snippet.title,
-    });
+    })
 
     return this.updatePlaylistItem(toUpdate).then(() => {
       if (itemsRemaining.length > 0) {
-        return this.updatePlaylistItems(itemsRemaining);
+        return this.updatePlaylistItems(itemsRemaining)
       }
-    });
+    })
   }
 
   updatePercentComplete(itemsRemaining) {
-    let complete = this.state.playlistItems.length - itemsRemaining.length;
+    let complete = this.state.playlistItems.length - itemsRemaining.length
     let percentComplete = Math.floor(
       (complete / this.state.playlistItems.length) * 100
-    );
+    )
     this.setState({
       percentComplete: percentComplete,
-    });
+    })
   }
 
   updatePlaylistItem(playlistItem) {
     const url =
-      "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet";
+      "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet"
 
     // Update only the required properties, plus the new position.
     const updateItem = {
@@ -341,7 +337,7 @@ class PlaylistDetailsPanel extends React.Component {
         resourceId: playlistItem.snippet.resourceId,
         position: playlistItem.snippet.position,
       },
-    };
+    }
 
     const options = {
       method: "put",
@@ -350,53 +346,53 @@ class PlaylistDetailsPanel extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(updateItem),
-    };
+    }
 
     return fetch(url, options).then((response) => {
       if (!response.ok) {
         return response.json().then((data) => {
           const message =
             this.getErrorMessage(data) ||
-            `updating playlistItem: ${response.status}`;
-          throw new Error(message);
-        });
+            `updating playlistItem: ${response.status}`
+          throw new Error(message)
+        })
       }
-    });
+    })
   }
 
   getErrorMessage(data) {
-    let error = data.error;
+    let error = data.error
 
     if (error) {
       if (error.errors && error.errors.length > 0) {
         if (error.errors[0].reason == "manualSortRequired") {
-          let url = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`;
-          let playlistLink = `<a href="${url}" target="_blank">here</a>`;
-          return `You must first change the playlist to manual ordering by dragging a video to a different position ${playlistLink}.`;
+          let url = `https://www.youtube.com/playlist?list=${this.props.playlist.id}`
+          let playlistLink = `<a href="${url}" target="_blank">here</a>`
+          return `You must first change the playlist to manual ordering by dragging a video to a different position ${playlistLink}.`
         }
       }
 
-      return `${error.code}: ${error.message}`;
+      return `${error.code}: ${error.message}`
     }
 
-    return null;
+    return null
   }
 }
 
 function YTDurationToSeconds(duration) {
-  var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+  var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/)
 
   match = match.slice(1).map(function (x) {
     if (x != null) {
-      return x.replace(/\D/, "");
+      return x.replace(/\D/, "")
     }
-  });
+  })
 
-  var hours = parseInt(match[0]) || 0;
-  var minutes = parseInt(match[1]) || 0;
-  var seconds = parseInt(match[2]) || 0;
+  var hours = parseInt(match[0]) || 0
+  var minutes = parseInt(match[1]) || 0
+  var seconds = parseInt(match[2]) || 0
 
-  return hours * 3600 + minutes * 60 + seconds;
+  return hours * 3600 + minutes * 60 + seconds
 }
 
 PlaylistDetailsPanel.propTypes = {
@@ -407,6 +403,6 @@ PlaylistDetailsPanel.propTypes = {
   onProgressStop: PropTypes.func.isRequired,
   onBackToPlaylists: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-};
+}
 
-export default PlaylistDetailsPanel;
+export default PlaylistDetailsPanel
